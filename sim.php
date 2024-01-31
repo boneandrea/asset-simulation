@@ -14,7 +14,8 @@ function cal(
 
     echo "[$name]\n";
     $current_year=intval(date("Y"));
-    echo "age year total_pay asset benefit tax4pay\n";
+    echo "age year total_pay asset benefit\n";
+    $sum_withdraw=0;
 
     for($i=0;$i<$range;$i++){
         $age=$i+$start_year-1973;
@@ -35,18 +36,48 @@ function cal(
                 $sum_draw_per_year[$age]=0;
             }
             $sum_draw_per_year[$age]+=$withdraw_per_month*12;
+            $sum_withdraw+=$withdraw_per_month*12;
         }else{
             $asset=$asset+$pay_per_year;
         }
 
         $asset*=change_rate_simulation($age, $name);
+
+        // cal tax
         $benefit=$asset-$paid_sum;
-        $tax_m300=intval($benefit * ($withdraw_per_month*12/$asset) * 0.1);
-        if($asset < 0){$sep="DEAD";}
-        echo sprintf("%3s ", $age);
-        echo ($start_year+$i)." ",(int)$paid_sum." ".(int)$asset." ".(int)$benefit." {$tax_m300} $sep\n";
+        if($sum_withdraw < $paid_sum){
+            $kazei=0;
+        }else{
+            $_kazei=$sum_withdraw - $paid_sum;
+            $kazei= $_kazei < $withdraw_per_month*12 ? $sum_withdraw - $paid_sum : $withdraw_per_month*12 ;
+        }
+        // $tax=shotokuzei($kazei);
+        // $tedori=$withdraw_per_month*12-$tax; // 総合課税なので計算しない
+
+        if($asset < 0){
+            $sep="DEAD";
+        }
+        echo sprintf("%3s ", $age).($start_year+$i)." ",(int)$paid_sum." ".(int)$asset." ".(int)$benefit." $sep\n";
         if($asset < 0){break;}
         if($age > 150){break;}
+    }
+}
+
+function shotokuzei($s){
+    if($s<195*10000){
+        return $s*0.05;
+    }
+    if($s<330*10000){
+        return $s*0.1-97500;
+    }
+    if($s<695*10000){
+        return $s*0.2-427500;
+    }
+    if($s<900*10000){
+        return $s*0.23-636000;
+    }
+    if($s<1800*10000){
+        return $s*0.33-1536000;
     }
 }
 
@@ -60,7 +91,7 @@ function change_rate_simulation($age, $name){
 
     if($name==="楽天"){
         if($age > 65) return 1.06;
-        return 1.12;
+        return 1.11;
     }
 }
 
@@ -68,7 +99,14 @@ function dump_sum_draw($sum_draw_per_year){
     ksort($sum_draw_per_year);
     echo "age pay/year\n";
     foreach($sum_draw_per_year as $y=>$money){
-        echo sprintf("%3d:%4d\n", $y,$money);
+
+        if($y >= 65)
+            $money+=9; // 年金
+
+        $tax=shotokuzei($money);
+        $tedori=$money-$tax;
+
+        echo sprintf("%3d:%4d [tax:%3d][%4d]\n", $y,$money,$tax, $tedori/12);
     }
 }
 
@@ -96,7 +134,7 @@ cal(
     start_year:2024,
     stop_age: 57,
     pay_per_year: 250,
-    withdraw_per_month:57
+    withdraw_per_month:50
 );
 
 dump_sum_draw($sum_draw_per_year);
