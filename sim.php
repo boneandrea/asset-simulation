@@ -44,6 +44,7 @@ function cal(
         $asset*=change_rate_simulation($age, $name);
 
         // cal tax
+        // 購入額を上回るまでは非課税
         $benefit=$asset-$paid_sum;
         if($sum_withdraw < $paid_sum){
             $kazei=0;
@@ -82,16 +83,14 @@ function shotokuzei($s){
 }
 
 function change_rate_simulation($age, $name){
-    global $r;
+    global $rate_sony,$rate_rakuten;
 
     if($name==="ソニー"){
-        if($age > 65) return 1.08;
-        return $r;
+        return $age > 65 ? 1.08 : $rate_sony;
     }
 
     if($name==="楽天"){
-        if($age > 65) return 1.06;
-        return 1.11;
+        return $age > 65 ? 1.06 : $rate_rakuten;
     }
 }
 
@@ -110,32 +109,64 @@ function dump_sum_draw($sum_draw_per_year){
     }
 }
 
-$r=$argv[1] ?? 1.1;
+$shortopts ="";
+$shortopts .= 's:';//:は値を必須で受け取る
+$shortopts .= 'r:';//:は値を必須で受け取る
+$shortopts .= 'S:';//:は値を必須で受け取る
+$shortopts .= 'R:';//:は値を必須で受け取る
+$shortopts .= 'd:';//:は値を必須で受け取る
+$shortopts .= 'y:';//:は値を必須で受け取る
+
+$options = getopt($shortopts);
+if(empty($options)){
+    fputs(STDERR, "There was a problem reading in the options.\n" . print_r($argv, true));
+
+    $output =<<<'EOL'
+-h [--help]  helpこのコマンド
+-s value ソニー利回り(eg: 1.11)
+-r value 楽天利回り(eg: 1.11)
+-d value 楽天年間積立(eg: 200)
+-S value ソニー月取り崩し(eg: 20)
+-R value 楽天ー月取り崩し(eg: 58)
+
+EOL;
+    echo $output;
+    exit(1);
+}
+
+$rate_rakuten=(float)($options["r"] ?? 1.1);
+$rate_sony=(float)($options["s"] ?? 1.1);
+$deposit_rakuten=(float)($options["d"] ?? 250);
+$stop_year=(int)($options["y"] ?? 57);
+
+$withdraw_rakuten=(float)($options["R"] ?? 50);
+$withdraw_sony=(float)($options["S"] ?? 28);
+
 $paid_sum=0;
 
 $sum_draw_per_year=[];
 
 cal(
-    $r,
+    $rate_sony,
     name: "ソニー",
     asset:0,
     pay_per_year: 18.66,
     start_year: 2007,
     stop_age: 65,
-    withdraw_per_month: 28
+    withdraw_per_month: $withdraw_sony
 );
 
 
 cal(
-    $r,
+    $rate_rakuten,
     paid_sum:1400,
     name: "楽天",
     asset:2400,
     start_year:2024,
-    stop_age: 57,
-    pay_per_year: 250,
-    withdraw_per_month:50
+    stop_age: $stop_year,
+    pay_per_year: $deposit_rakuten,
+    withdraw_per_month: $withdraw_rakuten
 );
 
 dump_sum_draw($sum_draw_per_year);
-echo "[[[ $r ]]]\n";
+echo print_r($options, true);
