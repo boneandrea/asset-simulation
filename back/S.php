@@ -12,12 +12,14 @@ class S{
     public function __construct($isCli=false,
                                 $rate_rakuten=1.0,
                                 $rate_sony=1.0,
-                                $rate_later=1.06
+                                $rate_later=1.06,
+                                $year_change_rate=65
     ){
         $this->isCLI=$isCli;
         $this->rate_sony=$rate_sony;
         $this->rate_rakuten=$rate_rakuten;
         $this->rate_later=$rate_later;
+        $this->year_change_rate=$year_change_rate;
     }
 
     public function cal(
@@ -116,11 +118,11 @@ class S{
     public function change_rate_simulation($age, $name){
 
         if($name==="ソニー"){
-            return $age > 65 ? $this->rate_later["sony"] : $this->rate_sony;
+            return $age > $this->year_change_rate ? $this->rate_later["sony"] : $this->rate_sony;
         }
 
         if($name==="楽天"){
-            return $age > 65 ? $this->rate_later["rakuten"] : $this->rate_rakuten;
+            return $age > $this->year_change_rate ? $this->rate_later["rakuten"] : $this->rate_rakuten;
         }
     }
 

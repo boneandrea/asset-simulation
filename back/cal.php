@@ -21,14 +21,14 @@ $rate_later=$options["rate_later"] ?? [
     "sony"=>1.06,
     "rakuten"=>1.06,
 ];
-
-$paid_sum=0;
+$year_change_rate=$options["year_change_rate"] ?? 0;
 
 $sum_draw_per_year=[];
 $x=new S(isCli: (php_sapi_name() === "cli"),
          rate_sony:$rate_sony,
          rate_rakuten:$rate_rakuten,
          rate_later:$rate_later,
+         year_change_rate:$year_change_rate
 );
 $result=[];
 $result["sony"]=$x->cal(

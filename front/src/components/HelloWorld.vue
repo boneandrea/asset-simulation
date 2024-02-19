@@ -28,6 +28,9 @@
         <input v-model="config.rate_later.rakuten" type="number" step="0.01" class="form-control" placeholder="65からの低減レート(rakuten)" aria-label="Username" aria-describedby="basic-addon1">
     </div>
     <div class="input-group mb-3">
+        <input v-model="config.year_change_rate" type="number" step="0.01" class="form-control" placeholder="低減レートになる年齢">
+    </div>
+    <div class="input-group mb-3">
         <button class="btn btn-primary" :disable="rendered" @click="update">Update</button>
     </div>
 </template>
@@ -48,10 +51,12 @@
      S:30,
      R:50,
      year:57,
+     d:240,
      rate_later:{
          sony:1.06,
          rakuten:1.06,
-     }
+     },
+     year_change_rate: 65
  })
  const canvasRef = ref(null);
  const rendered = ref(false);
