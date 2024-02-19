@@ -4,10 +4,10 @@
     </div>
     <hr>
     <div class="input-group mb-3">
-        <input v-model="config.s" type="number" class="form-control" placeholder="sony rate(e.g.: 1.10)" aria-label="Username" aria-describedby="basic-addon1">
+        <input v-model="config.s" type="number" class="form-control" step="0.01" placeholder="sony rate(e.g.: 1.10)" aria-label="Username" aria-describedby="basic-addon1">
     </div>
     <div class="input-group mb-3">
-        <input v-model="config.r" type="number" class="form-control" placeholder="楽天 rate(e.g.: 1.11)" aria-label="Username" aria-describedby="basic-addon1">
+        <input v-model="config.r" type="number" class="form-control" step="0.01" placeholder="楽天 rate(e.g.: 1.11)" aria-label="Username" aria-describedby="basic-addon1">
     </div>
     <div class="input-group mb-3">
         <input v-model="config.d" type="number" class="form-control" step="10" placeholder="楽天 年間積立" aria-label="Username" aria-describedby="basic-addon1">
