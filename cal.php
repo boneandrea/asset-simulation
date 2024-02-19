@@ -1,16 +1,29 @@
 <?php
-
 require(__DIR__."/S.php");
-
 $x=new S();
+
+$body=file_get_contents("php://input");
+$json=json_decode($body,true);
+error_log(print_r($json,true));
+
+$options=$json["data"] ?? [];
+
+error_log(print_r($options,true));
 
 $rate_rakuten=(float)($options["r"] ?? 1.1);
 $rate_sony=(float)($options["s"] ?? 1.1);
 $deposit_rakuten=(float)($options["d"] ?? 250);
-$stop_year=(int)($options["y"] ?? 57);
+$stop_year=(int)($options["year"] ?? 57);
 
 $withdraw_rakuten=(float)($options["R"] ?? 50);
 $withdraw_sony=(float)($options["S"] ?? 28);
+
+error_log($rate_rakuten);
+error_log($rate_sony);
+error_log($deposit_rakuten);
+error_log($stop_year);
+error_log($withdraw_sony);
+error_log($withdraw_rakuten);
 
 $paid_sum=0;
 

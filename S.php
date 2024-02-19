@@ -138,20 +138,21 @@ class S{
     }
 }
 
-$shortopts ="";
-$shortopts .= 's:';//:は値を必須で受け取る
-$shortopts .= 'r:';//:は値を必須で受け取る
-$shortopts .= 'S:';//:は値を必須で受け取る
-$shortopts .= 'R:';//:は値を必須で受け取る
-$shortopts .= 'd:';//:は値を必須で受け取る
-$shortopts .= 'y:';//:は値を必須で受け取る
-
-$options = getopt($shortopts);
 if(php_sapi_name() === "cli"){
+    error_log("CLICLI");
+    $shortopts ="";
+    $shortopts .= 's:';//:は値を必須で受け取る
+    $shortopts .= 'r:';//:は値を必須で受け取る
+    $shortopts .= 'S:';//:は値を必須で受け取る
+    $shortopts .= 'R:';//:は値を必須で受け取る
+    $shortopts .= 'd:';//:は値を必須で受け取る
+    $shortopts .= 'y:';//:は値を必須で受け取る
+
+    $options = getopt($shortopts);
     if(empty($options)){
         fputs(STDERR, "There was a problem reading in the options.\n" . print_r($argv, true));
 
-    $output =<<<'EOL'
+        $output =<<<'EOL'
 -h [--help]  helpこのコマンド
 -s value ソニー利回り(eg: 1.11)
 -r value 楽天利回り(eg: 1.11)
@@ -160,7 +161,9 @@ if(php_sapi_name() === "cli"){
 -R value 楽天ー月取り崩し(eg: 58)
 
 EOL;
-    echo $output;
-    exit(1);
+        echo $output;
+        exit(1);
     }
 }
+
+//error_log(print_r($_SERVER,true));

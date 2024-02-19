@@ -1,5 +1,7 @@
 <template>
-    <canvas ref="canvasRef" />
+    <div class="chart-container" style="width: 1200px">
+        <canvas ref="canvasRef"></canvas>
+    </div>
     <hr>
     <div class="input-group mb-3">
         <input v-model="config.s" type="text" class="form-control" placeholder="sony rate(e.g.: 1.10)" aria-label="Username" aria-describedby="basic-addon1">
@@ -37,7 +39,7 @@
  const config=ref({
      s:1.10,
      r:1.11,
-     S:20,
+     S:30,
      R:50,
      year:57,
  })
@@ -61,7 +63,7 @@
              tension: 0.1
          },
          {
-             label: 'データ',
+             label: 'total',
              data: [],
              fill: false,
              borderColor: '#E74C3C',
@@ -102,25 +104,35 @@
              if (r.status === 'error') {
                  throw new Error(r['reason'])
              }
-             console.log(r)
-             console.log(r.rakuten.data)
-             console.log(r.sony.data)
 
-             data.value.labels.splice(0,  data.value.labels.splice.length-1)
-             data.value.labels=r.rakuten.data.map(e=>`${e.year} / ${e.age}`)
+             // set labels
+             const xaxis={}
+             r.rakuten.data.forEach(e=>xaxis[e.year]=1)
+             r.sony.data.forEach(e=>xaxis[e.year]=1)
 
-             data.value.datasets[0].data.splice(0, data.value.datasets[0].data.length-1)
+             const labels=Object.keys(xaxis).map(e=>parseInt(e)).filter(year=>year >= 2024)
+             data.value.labels.splice(0, data.value.labels.length)
+             labels.forEach(y=>data.value.labels.push(`${y}/${y-1973}`))
+
              data.value.datasets[0].label=r.rakuten.name
-             data.value.datasets[0].data=r.rakuten.data.map(e=>e.asset)
+             data.value.datasets[0].data.splice(0, data.value.datasets[0].data.length)
+             r.rakuten.data.filter(e=>e.year >= 2024).forEach(e=>{
+                 data.value.datasets[0].data[labels.indexOf(e.year)] = e.asset
+             })
 
-             data.value.datasets[1].data.splice(0, data.value.datasets[1].data.length-1)
              data.value.datasets[1].label=r.sony.name
-             data.value.datasets[1].data=r.sony.data.map(e=>e.asset)
+             data.value.datasets[1].data.splice(0, data.value.datasets[1].data.length)
+             r.sony.data.filter(e=>e.year >= 2024).forEach(e=>{
+                 data.value.datasets[1].data[labels.indexOf(e.year)] = e.asset
+             })
 
-             data.value.datasets[2].data.splice(0, data.value.datasets[2].data.length-1)
+             data.value.datasets[2].data.splice(0, data.value.datasets[2].data.length)
              data.value.datasets[2].label="TOTAL"
-             data.value.datasets[2].data=r.sony.data.map((_e,i)=>r.sony.data[i]?.asset+r.rakuten.data[i]?.asset)
-
+             labels.forEach((y,i)=>{
+                 data.value.datasets[2].data[i] =
+                     (data.value.datasets[0].data[i] ?? 0) +
+                     (data.value.datasets[1].data[i] ?? 0)
+             })
              init()
          })
          .catch((e) => {
@@ -132,4 +144,7 @@
  }
 </script>
 <style scoped>
+ canvas{
+     width: 100%
+ }
 </style>
