@@ -20,7 +20,7 @@
         <input v-model="config.year" type="text" class="form-control" placeholder="楽天終了年齢" aria-label="Username" aria-describedby="basic-addon1">
     </div>
     <div class="input-group mb-3">
-        <button class="btn btn-primary" @click="update">Update</button>
+        <button class="btn btn-primary" :disable="rendered" @click="update">Update</button>
     </div>
 </template>
 <script setup>
@@ -42,37 +42,50 @@
      year:57,
  })
  const canvasRef = ref(null);
+ const rendered = ref(false);
  const data=ref({
      labels: ['1月', '2月', '３月', '４月', '5月', '6月', '７月'],
-     datasets: [{
-         label: 'データ',
-         data: [65, 59, 80, 81, 56, 55, 40],
-         fill: false,
-         borderColor: 'rgb(75, 192, 192)',
-         tension: 0.1
-     }]
+     datasets: [
+         {
+             label: 'データ',
+             data: [],
+             fill: false,
+             borderColor: 'rgb(75, 192, 192)',
+             tension: 0.1
+         },
+         {
+             label: 'データ',
+             data: [],
+             fill: false,
+             borderColor: '#a23456',
+             tension: 0.1
+         },
+         {
+             label: 'データ',
+             data: [],
+             fill: false,
+             borderColor: '#E74C3C',
+             tension: 0.1
+         }
+     ]
  })
  const init=()=>{
      if (canvasRef.value === null) return;
      const canvas = canvasRef.value.getContext("2d");
      if (canvas === null) return;
-     const c = new Chart(canvas, {
+     rendered.value=false
+     chart.value = new Chart(canvas, {
          type: "line",
-         data: {
-             labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-             datasets: [{
-                 label: "てすと",
-                 data: [65, 59, 80, 81, 56, 55, 40],
-             }]
-         }
+         data: data.value
      });
-     console.log(c)
+     rendered.value=true
  }
-
+ const chart=ref(null)
  onMounted(() => {
      init()
  })
  const update=()=>{
+     chart.value.destroy()
      console.log(data.value, config.value)
      const api="http://localhost:8888/cal.php"
      fetch(api, {
@@ -86,16 +99,29 @@
              return response.json()
          })
          .then((r) => {
-             console.log(r)
-             console.log(data.value.datasets[0].data)
-             data.value.datasets[0].dataa.push(50)
-             //data.value.datasets[0].data.splice(0, data.value.datasets[0].data.length-1)
-             console.log(r.rakuten.data)
-             //data.value.datasets.data=r.rakuten.data.map(e=>e.asset)
-
              if (r.status === 'error') {
                  throw new Error(r['reason'])
              }
+             console.log(r)
+             console.log(r.rakuten.data)
+             console.log(r.sony.data)
+
+             data.value.labels.splice(0,  data.value.labels.splice.length-1)
+             data.value.labels=r.rakuten.data.map(e=>`${e.year} / ${e.age}`)
+
+             data.value.datasets[0].data.splice(0, data.value.datasets[0].data.length-1)
+             data.value.datasets[0].label=r.rakuten.name
+             data.value.datasets[0].data=r.rakuten.data.map(e=>e.asset)
+
+             data.value.datasets[1].data.splice(0, data.value.datasets[1].data.length-1)
+             data.value.datasets[1].label=r.sony.name
+             data.value.datasets[1].data=r.sony.data.map(e=>e.asset)
+
+             data.value.datasets[2].data.splice(0, data.value.datasets[2].data.length-1)
+             data.value.datasets[2].label="TOTAL"
+             data.value.datasets[2].data=r.sony.data.map((_e,i)=>r.sony.data[i]?.asset+r.rakuten.data[i]?.asset)
+
+             init()
          })
          .catch((e) => {
              console.error(e)
