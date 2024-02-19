@@ -22,6 +22,12 @@
         <input v-model="config.year" type="text" class="form-control" placeholder="楽天終了年齢" aria-label="Username" aria-describedby="basic-addon1">
     </div>
     <div class="input-group mb-3">
+        <input v-model="config.rate_later.sony" type="text" class="form-control" placeholder="65からの低減レート(sony)" aria-label="Username" aria-describedby="basic-addon1">
+    </div>
+    <div class="input-group mb-3">
+        <input v-model="config.rate_later.rakuten" type="text" class="form-control" placeholder="65からの低減レート(rakuten)" aria-label="Username" aria-describedby="basic-addon1">
+    </div>
+    <div class="input-group mb-3">
         <button class="btn btn-primary" :disable="rendered" @click="update">Update</button>
     </div>
 </template>
@@ -42,6 +48,10 @@
      S:30,
      R:50,
      year:57,
+     rate_later:{
+         sony:1.06,
+         rakuten:1.06,
+     }
  })
  const canvasRef = ref(null);
  const rendered = ref(false);
@@ -53,24 +63,51 @@
              data: [],
              fill: false,
              borderColor: 'rgb(75, 192, 192)',
-             tension: 0.1
+             tension: 0.1,
+             yAxisID: "y",
          },
          {
              label: 'データ',
              data: [],
              fill: false,
              borderColor: '#a23456',
-             tension: 0.1
+             tension: 0.1,
+             yAxisID: "y", // 追加
          },
          {
              label: 'total',
              data: [],
              fill: false,
              borderColor: '#E74C3C',
-             tension: 0.1
+             tension: 0.1,
+             yAxisID: "y", // 追加
+         },
+         {
+             label: '浪費/月',
+             data: [],
+             fill: false,
+             borderColor: '#11bC3C',
+             tension: 0.1,
+             yAxisID: "y1", // 追加
          }
      ]
  })
+ const options={
+     responsive: true,
+     scales: {
+         y: {
+             type: "linear",
+             display: true,
+             position: "left",
+         },
+         y1: {
+             type: "linear",
+             display: true,
+             position: "right",
+         },
+     }
+ }
+
  const init=()=>{
      if (canvasRef.value === null) return;
      const canvas = canvasRef.value.getContext("2d");
@@ -78,7 +115,8 @@
      rendered.value=false
      chart.value = new Chart(canvas, {
          type: "line",
-         data: data.value
+         data: data.value,
+         options
      });
      rendered.value=true
  }
@@ -132,6 +170,21 @@
                  data.value.datasets[2].data[i] =
                      (data.value.datasets[0].data[i] ?? 0) +
                      (data.value.datasets[1].data[i] ?? 0)
+             })
+
+
+             // 消費
+             data.value.datasets[3].data.splice(0, data.value.datasets[3].data.length)
+             labels.forEach((y,i)=>{
+                 if(i < 20){
+                     data.value.datasets[3].data[i] =0
+                 }else{
+                     data.value.datasets[3].data[i] =0
+                     if(data.value.datasets[0].data[i] > 0)
+                         data.value.datasets[3].data[i] +=config.value.R*12
+                     if(data.value.datasets[1].data[i] > 0)
+                         data.value.datasets[3].data[i] +=config.value.S*12
+                 }
              })
              init()
          })

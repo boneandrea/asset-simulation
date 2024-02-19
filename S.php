@@ -7,16 +7,17 @@ function eecho($s){
 class S{
     public $sum_draw_per_year=[];
     private $isCLI;
-    private $rate_rakuten,$rate_sony;
+    private $rate_rakuten,$rate_sony,$rate_later;
 
     public function __construct($isCli=false,
                                 $rate_rakuten=1.0,
-                                $rate_sony=1.0
+                                $rate_sony=1.0,
+                                $rate_later=1.06
     ){
         $this->isCLI=$isCli;
         $this->rate_sony=$rate_sony;
         $this->rate_rakuten=$rate_rakuten;
-
+        $this->rate_later=$rate_later;
     }
 
     public function cal(
@@ -115,11 +116,11 @@ class S{
     public function change_rate_simulation($age, $name){
 
         if($name==="ソニー"){
-            return $age > 65 ? 1.08 : $this->rate_sony;
+            return $age > 65 ? $this->rate_later["sony"] : $this->rate_sony;
         }
 
         if($name==="楽天"){
-            return $age > 65 ? 1.06 : $this->rate_rakuten;
+            return $age > 65 ? $this->rate_later["rakuten"] : $this->rate_rakuten;
         }
     }
 

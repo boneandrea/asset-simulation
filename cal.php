@@ -17,13 +17,10 @@ $stop_year=(int)($options["year"] ?? 57);
 
 $withdraw_rakuten=(float)($options["R"] ?? 50);
 $withdraw_sony=(float)($options["S"] ?? 28);
-
-error_log($rate_rakuten);
-error_log($rate_sony);
-error_log($deposit_rakuten);
-error_log($stop_year);
-error_log($withdraw_sony);
-error_log($withdraw_rakuten);
+$rate_later=$options["rate_later"] ?? [
+    "sony"=>1.06,
+    "rakuten"=>1.06,
+];
 
 $paid_sum=0;
 
@@ -31,6 +28,7 @@ $sum_draw_per_year=[];
 $x=new S(isCli: (php_sapi_name() === "cli"),
          rate_sony:$rate_sony,
          rate_rakuten:$rate_rakuten,
+         rate_later:$rate_later,
 );
 $result=[];
 $result["sony"]=$x->cal(
