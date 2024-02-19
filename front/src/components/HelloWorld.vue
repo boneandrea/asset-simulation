@@ -4,28 +4,28 @@
     </div>
     <hr>
     <div class="input-group mb-3">
-        <input v-model="config.s" type="text" class="form-control" placeholder="sony rate(e.g.: 1.10)" aria-label="Username" aria-describedby="basic-addon1">
+        <input v-model="config.s" type="number" class="form-control" placeholder="sony rate(e.g.: 1.10)" aria-label="Username" aria-describedby="basic-addon1">
     </div>
     <div class="input-group mb-3">
-        <input v-model="config.r" type="text" class="form-control" placeholder="楽天 rate(e.g.: 1.11)" aria-label="Username" aria-describedby="basic-addon1">
+        <input v-model="config.r" type="number" class="form-control" placeholder="楽天 rate(e.g.: 1.11)" aria-label="Username" aria-describedby="basic-addon1">
     </div>
     <div class="input-group mb-3">
-        <input v-model="config.d" type="text" class="form-control" placeholder="楽天 年間積立" aria-label="Username" aria-describedby="basic-addon1">
+        <input v-model="config.d" type="number" class="form-control" step="10" placeholder="楽天 年間積立" aria-label="Username" aria-describedby="basic-addon1">
     </div>
     <div class="input-group mb-3">
-        <input v-model="config.S" type="text" class="form-control" placeholder="sony 取り崩し/month" aria-label="Username" aria-describedby="basic-addon1">
+        <input v-model="config.S" type="number" class="form-control" placeholder="sony 取り崩し/month" aria-label="Username" aria-describedby="basic-addon1">
     </div>
     <div class="input-group mb-3">
-        <input v-model="config.R" type="text" class="form-control" placeholder="楽天 取り崩し/month" aria-label="Username" aria-describedby="basic-addon1">
+        <input v-model="config.R" type="number" class="form-control" placeholder="楽天 取り崩し/month" aria-label="Username" aria-describedby="basic-addon1">
     </div>
     <div class="input-group mb-3">
-        <input v-model="config.year" type="text" class="form-control" placeholder="楽天終了年齢" aria-label="Username" aria-describedby="basic-addon1">
+        <input v-model="config.year" type="number" class="form-control" placeholder="楽天終了年齢" aria-label="Username" aria-describedby="basic-addon1">
     </div>
     <div class="input-group mb-3">
-        <input v-model="config.rate_later.sony" type="text" class="form-control" placeholder="65からの低減レート(sony)" aria-label="Username" aria-describedby="basic-addon1">
+        <input v-model="config.rate_later.sony" type="number" step="0.01" class="form-control" placeholder="65からの低減レート(sony)" aria-label="Username" aria-describedby="basic-addon1">
     </div>
     <div class="input-group mb-3">
-        <input v-model="config.rate_later.rakuten" type="text" class="form-control" placeholder="65からの低減レート(rakuten)" aria-label="Username" aria-describedby="basic-addon1">
+        <input v-model="config.rate_later.rakuten" type="number" step="0.01" class="form-control" placeholder="65からの低減レート(rakuten)" aria-label="Username" aria-describedby="basic-addon1">
     </div>
     <div class="input-group mb-3">
         <button class="btn btn-primary" :disable="rendered" @click="update">Update</button>
