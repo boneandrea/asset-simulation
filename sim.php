@@ -169,4 +169,4 @@ cal(
 );
 
 dump_sum_draw($sum_draw_per_year);
-echo print_r($options, true);
+echo "{$rate_rakuten} {$rate_sony}",PHP_EOL;
