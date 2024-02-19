@@ -78,6 +78,7 @@ class S{
 
             if($asset < 0){
                 $sep="DEAD";
+                $asset=0;
             }
             $result["data"][]=[
                 "age"=>$age,
@@ -87,7 +88,7 @@ class S{
                 "benefit"=>(int)$benefit,
                 "sep"=>$sep,
             ];
-            if($asset < 0){break;}
+            if($asset <= 0){break;}
             if($age > 150){break;}
         }
         return $result;
