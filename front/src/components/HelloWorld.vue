@@ -77,7 +77,7 @@
              fill: false,
              borderColor: '#a23456',
              tension: 0.1,
-             yAxisID: "y", // 追加
+             yAxisID: "y",
          },
          {
              label: 'total',
@@ -85,10 +85,10 @@
              fill: false,
              borderColor: '#E74C3C',
              tension: 0.1,
-             yAxisID: "y", // 追加
+             yAxisID: "y",
          },
          {
-             label: '浪費/月',
+             label: '浪費',
              data: [],
              fill: false,
              borderColor: '#11bC3C',
