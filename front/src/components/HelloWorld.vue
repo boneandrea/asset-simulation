@@ -194,9 +194,7 @@
              // 消費
              data.value.datasets[3].data.splice(0, data.value.datasets[3].data.length)
              labels.forEach((y,i)=>{
-                 if(i < 20){
-                     data.value.datasets[3].data[i] =0
-                 }else{
+                 if(i >= 20){
                      data.value.datasets[3].data[i] =0
                      if(data.value.datasets[0].data[i] > 0)
                          data.value.datasets[3].data[i] +=config.value.R*12
