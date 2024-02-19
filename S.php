@@ -1,5 +1,4 @@
 <?php
-
 function eecho($s){
     if(php_sapi_name() === "cli")
         echo $s;
@@ -8,13 +7,19 @@ function eecho($s){
 class S{
     public $sum_draw_per_year=[];
     private $isCLI;
+    private $rate_rakuten,$rate_sony;
 
-    public function __construct($isCli=false){
+    public function __construct($isCli=false,
+                                $rate_rakuten=1.0,
+                                $rate_sony=1.0
+    ){
         $this->isCLI=$isCli;
+        $this->rate_sony=$rate_sony;
+        $this->rate_rakuten=$rate_rakuten;
+
     }
 
     public function cal(
-        $r,
         $json=false,
         $name="",
         $paid_sum=0,
@@ -107,14 +112,13 @@ class S{
     }
 
     public function change_rate_simulation($age, $name){
-        global $rate_sony,$rate_rakuten;
 
         if($name==="ソニー"){
-            return $age > 65 ? 1.08 : $rate_sony;
+            return $age > 65 ? 1.08 : $this->rate_sony;
         }
 
         if($name==="楽天"){
-            return $age > 65 ? 1.06 : $rate_rakuten;
+            return $age > 65 ? 1.06 : $this->rate_rakuten;
         }
     }
 

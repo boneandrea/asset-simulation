@@ -15,10 +15,12 @@ $withdraw_sony=(float)($options["S"] ?? 28);
 $paid_sum=0;
 
 $sum_draw_per_year=[];
-$x=new S(isCli: (php_sapi_name() === "cli"));
+$x=new S(isCli: (php_sapi_name() === "cli"),
+         rate_sony:$rate_sony,
+         rate_rakuten:$rate_rakuten,
+);
 $result=[];
 $result["sony"]=$x->cal(
-    $rate_sony,
     json: true,
     name: "ソニー",
     asset:0,
@@ -30,7 +32,6 @@ $result["sony"]=$x->cal(
 
 
 $result["rakuten"]=$x->cal(
-    $rate_rakuten,
     json: true,
     paid_sum:1400,
     name: "楽天",
@@ -43,7 +44,10 @@ $result["rakuten"]=$x->cal(
 
 $x->dump_sum_draw();
 
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Headers: X-Requested-With,Authorization,Content-Type');
-header("Content-type: application/json");
-echo json_encode($result);
+if(php_sapi_name() !== "cli"){
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Headers: X-Requested-With,Authorization,Content-Type');
+    header("Content-type: application/json");
+
+    echo json_encode($result);
+}
