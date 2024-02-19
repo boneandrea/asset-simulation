@@ -104,11 +104,24 @@
              type: "linear",
              display: true,
              position: "left",
+             title:{
+                 display: true,
+                 text: "資産総額(万)",
+             }
          },
          y1: {
              type: "linear",
              display: true,
              position: "right",
+             title:{
+                 display: true,
+                 text: "年額(万)",
+             },
+             ticks: {
+                 //callback: function(value, index, ticks) {
+                 //return `${value}万`
+                 //}
+             }
          },
      }
  }
