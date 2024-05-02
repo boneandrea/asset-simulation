@@ -1,11 +1,11 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
+import Simulator from './components/Simulator.vue'
 </script>
 
 <template>
   <main>
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+      <Simulator msg="You did it!" />
     </div>
   </main>
 </template>
