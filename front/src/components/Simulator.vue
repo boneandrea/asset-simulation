@@ -99,6 +99,7 @@ import { Chart, registerables } from "chart.js";
 import Input from "./Input.vue";
 Chart.register(...registerables);
 
+const BONE_AT = 1973;
 const config = ref({
   s: 1.1,
   r: 1.11,
@@ -224,7 +225,7 @@ const update = () => {
         .map((e) => parseInt(e))
         .filter((year) => year >= 2024);
       data.value.labels.splice(0, data.value.labels.length);
-      labels.forEach((y) => data.value.labels.push(`${y}/${y - 1973}`));
+      labels.forEach((y) => data.value.labels.push(`${y}/${y - BONE_AT}`));
 
       data.value.datasets[0].label = r.rakuten.name;
       data.value.datasets[0].data.splice(0, data.value.datasets[0].data.length);
@@ -253,7 +254,7 @@ const update = () => {
       // 消費
       data.value.datasets[3].data.splice(0, data.value.datasets[3].data.length);
       labels.forEach((y, i) => {
-        if (i >= 20) {
+        if (y - BONE_AT >= config.value.year) {
           data.value.datasets[3].data[i] = 0;
           if (data.value.datasets[0].data[i] > 0)
             data.value.datasets[3].data[i] += config.value.R * 12;
