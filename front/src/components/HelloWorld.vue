@@ -96,6 +96,7 @@ defineProps({
 });
 import { ref, onMounted } from "vue";
 import { Chart, registerables } from "chart.js";
+import Input from "./Input.vue";
 Chart.register(...registerables);
 
 const config = ref({
