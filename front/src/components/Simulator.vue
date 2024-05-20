@@ -3,83 +3,85 @@
     <canvas ref="canvasRef"></canvas>
   </div>
   <hr />
-  <div class="input-group mb-3">
-    <input
-      v-model="config.s"
-      type="number"
-      class="form-control"
-      step="0.01"
-      placeholder="sony rate(e.g.: 1.10)"
-    />
-  </div>
-  <div class="input-group mb-3">
-    <input
-      v-model="config.r"
-      type="number"
-      class="form-control"
-      step="0.01"
-      placeholder="楽天 rate(e.g.: 1.11)"
-    />
-  </div>
-  <div class="input-group mb-3">
-    <input
-      v-model="config.d"
-      type="number"
-      class="form-control"
-      step="10"
-      placeholder="楽天 年間積立"
-    />
-  </div>
-  <div class="input-group mb-3">
-    <input
-      v-model="config.S"
-      type="number"
-      class="form-control"
-      placeholder="sony 取り崩し/month"
-    />
-  </div>
-  <div class="input-group mb-3">
-    <input
-      v-model="config.R"
-      type="number"
-      class="form-control"
-      placeholder="楽天 取り崩し/month"
-    />
-  </div>
-  <div class="input-group mb-3">
-    <input
-      v-model="config.year"
-      type="number"
-      class="form-control"
-      placeholder="楽天終了年齢"
-    />
-  </div>
-  <div class="input-group mb-3">
-    <input
-      v-model="config.rate_later.sony"
-      type="number"
-      step="0.01"
-      class="form-control"
-      placeholder="65からの低減レート(sony)"
-    />
-  </div>
-  <div class="input-group mb-3">
-    <input
-      v-model="config.rate_later.rakuten"
-      type="number"
-      step="0.01"
-      class="form-control"
-      placeholder="65からの低減レート(rakuten)"
-    />
-  </div>
-  <div class="input-group mb-3">
-    <input
-      v-model="config.year_change_rate"
-      type="number"
-      step="0.01"
-      class="form-control"
-      placeholder="低減レートになる年齢"
-    />
+  <div @keyup.enter="update">
+    <div class="input-group mb-3">
+      <input
+        v-model="config.s"
+        type="number"
+        class="form-control"
+        step="0.01"
+        placeholder="sony rate(e.g.: 1.10)"
+      />
+    </div>
+    <div class="input-group mb-3">
+      <input
+        v-model="config.r"
+        type="number"
+        class="form-control"
+        step="0.01"
+        placeholder="楽天 rate(e.g.: 1.11)"
+      />
+    </div>
+    <div class="input-group mb-3">
+      <input
+        v-model="config.d"
+        type="number"
+        class="form-control"
+        step="10"
+        placeholder="楽天 年間積立"
+      />
+    </div>
+    <div class="input-group mb-3">
+      <input
+        v-model="config.S"
+        type="number"
+        class="form-control"
+        placeholder="sony 取り崩し/month"
+      />
+    </div>
+    <div class="input-group mb-3">
+      <input
+        v-model="config.R"
+        type="number"
+        class="form-control"
+        placeholder="楽天 取り崩し/month"
+      />
+    </div>
+    <div class="input-group mb-3">
+      <input
+        v-model="config.year"
+        type="number"
+        class="form-control"
+        placeholder="楽天終了年齢"
+      />
+    </div>
+    <div class="input-group mb-3">
+      <input
+        v-model="config.rate_later.sony"
+        type="number"
+        step="0.01"
+        class="form-control"
+        placeholder="65からの低減レート(sony)"
+      />
+    </div>
+    <div class="input-group mb-3">
+      <input
+        v-model="config.rate_later.rakuten"
+        type="number"
+        step="0.01"
+        class="form-control"
+        placeholder="65からの低減レート(rakuten)"
+      />
+    </div>
+    <div class="input-group mb-3">
+      <input
+        v-model="config.year_change_rate"
+        type="number"
+        step="0.01"
+        class="form-control"
+        placeholder="低減レートになる年齢"
+      />
+    </div>
   </div>
   <div class="input-group mb-3">
     <button class="btn btn-primary" :disable="rendered" @click="update">
@@ -199,7 +201,6 @@ onMounted(() => {
 });
 const update = () => {
   chart.value.destroy();
-  console.log(data.value, config.value);
   const api = "http://localhost:8888/cal.php";
   fetch(api, {
     method: "POST",
