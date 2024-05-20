@@ -1,0 +1,4 @@
+(cd back && ./run) &
+echo $?
+(cd front && ./run) &
+
