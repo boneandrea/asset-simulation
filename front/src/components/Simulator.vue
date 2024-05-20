@@ -10,6 +10,7 @@
         type="number"
         class="form-control"
         step="0.01"
+        min="0"
         placeholder="sony rate(e.g.: 1.10)"
       />
     </div>
@@ -19,6 +20,7 @@
         type="number"
         class="form-control"
         step="0.01"
+        min="0"
         placeholder="楽天 rate(e.g.: 1.11)"
       />
     </div>
@@ -28,6 +30,7 @@
         type="number"
         class="form-control"
         step="10"
+        min="0"
         placeholder="楽天 年間積立"
       />
     </div>
@@ -35,6 +38,7 @@
       <input
         v-model="config.S"
         type="number"
+        min="0"
         class="form-control"
         placeholder="sony 取り崩し/month"
       />
@@ -44,6 +48,7 @@
         v-model="config.R"
         type="number"
         class="form-control"
+        min="0"
         placeholder="楽天 取り崩し/month"
       />
     </div>
@@ -52,6 +57,7 @@
         v-model="config.year"
         type="number"
         class="form-control"
+        min="55"
         placeholder="楽天終了年齢"
       />
     </div>
@@ -60,6 +66,7 @@
         v-model="config.rate_later.sony"
         type="number"
         step="0.01"
+        min="0"
         class="form-control"
         placeholder="65からの低減レート(sony)"
       />
@@ -69,6 +76,7 @@
         v-model="config.rate_later.rakuten"
         type="number"
         step="0.01"
+        min="0"
         class="form-control"
         placeholder="65からの低減レート(rakuten)"
       />
@@ -77,9 +85,9 @@
       <input
         v-model="config.year_change_rate"
         type="number"
-        step="0.01"
         class="form-control"
         placeholder="低減レートになる年齢"
+        min="50"
       />
     </div>
   </div>
