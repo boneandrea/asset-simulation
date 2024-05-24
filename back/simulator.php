@@ -1,5 +1,6 @@
 <?php
-const BONE_AT=1973;
+
+const BONE_AT = 1973;
 function eecho($s)
 {
     if(php_sapi_name() === "cli") {

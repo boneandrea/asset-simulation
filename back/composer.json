@@ -1,0 +1,17 @@
+{
+    "name": "banchou/back",
+    "autoload": {
+        "psr-4": {
+            "Banchou\\Back\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "boneandrea",
+            "email": "bone.andrea.anthrax@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.57"
+    }
+}
