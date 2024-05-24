@@ -1,26 +1,34 @@
 <?php
 
 require(__DIR__."/simulator.php");
+if($_SERVER['REQUEST_METHOD'] === "OPTIONS"){
+    header("Access-Control-Allow-Origin: *");
+    header("Access-Control-Allow-Headers: X-Requested-With, Origin, X-Csrftoken, Content-Type, Accept");
+    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, CONNECT, OPTIONS, TRACE, PATCH, HEAD");
+    exit;
+}
 
 $body = file_get_contents("php://input");
 $json = json_decode($body, true);
-error_log(print_r($json, true));
-
 $options = $json["data"] ?? [];
 
 error_log(print_r($options, true));
 
-$rate_rakuten = (float)($options["r"] ?? 1.1);
-$rate_sony = (float)($options["s"] ?? 1.1);
+$rate_rakuten = 1+(float)($options["r"] ?? 10)/100;
+$rate_sony = 1+(float)($options["s"] ?? 10)/100;
+
 $deposit_rakuten = (float)($options["d"] ?? 250);
 $stop_year = (int)($options["year"] ?? 57);
 
 $withdraw_rakuten = (float)($options["R"] ?? 50);
 $withdraw_sony = (float)($options["S"] ?? 28);
-$rate_later = $options["rate_later"] ?? [
-    "sony" => 1.06,
-    "rakuten" => 1.06,
+
+$rate_later = [
+    "sony" => 1+(float)$options["rate_later"]["sony"]/100,
+    "rakuten" => 1+(float)$options["rate_later"]["rakuten"]/100
 ];
+error_log(print_r($rate_later, true));
+
 $year_change_rate = $options["year_change_rate"] ?? 0;
 
 $sum_draw_per_year = [];

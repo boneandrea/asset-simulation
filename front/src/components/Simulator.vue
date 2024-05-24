@@ -5,24 +5,10 @@
 	<hr />
 	<div @keyup.enter="update">
 		<div class="input-group mb-3">
-			<input
-				v-model="config.s"
-				type="number"
-				class="form-control"
-				step="0.01"
-				min="0"
-				placeholder="sony rate(e.g.: 1.10)"
-			/>
+			<input v-model="config.s" type="number" class="form-control" min="0" placeholder="sony yield % (e.g.: 10)" />
 		</div>
 		<div class="input-group mb-3">
-			<input
-				v-model="config.r"
-				type="number"
-				class="form-control"
-				step="0.01"
-				min="0"
-				placeholder="楽天 rate(e.g.: 1.11)"
-			/>
+			<input v-model="config.r" type="number" class="form-control" min="0" placeholder="楽天 yield % (e.g.: 11)" />
 		</div>
 		<div class="input-group mb-3">
 			<input v-model="config.d" type="number" class="form-control" step="10" min="0" placeholder="楽天 年間積立" />
@@ -40,20 +26,18 @@
 			<input
 				v-model="config.rate_later.sony"
 				type="number"
-				step="0.01"
 				min="0"
 				class="form-control"
-				placeholder="65からの低減レート(sony)"
+				placeholder="65からの低減yield % (sony)"
 			/>
 		</div>
 		<div class="input-group mb-3">
 			<input
 				v-model="config.rate_later.rakuten"
 				type="number"
-				step="0.01"
 				min="0"
 				class="form-control"
-				placeholder="65からの低減レート(rakuten)"
+				placeholder="65からの低減yield % (rakuten)"
 			/>
 		</div>
 		<div class="input-group mb-3">
@@ -83,15 +67,15 @@ Chart.register(...registerables)
 
 const BONE_AT = 1973
 const config = ref({
-	s: 1.1,
-	r: 1.11,
+	s: 10,
+	r: 11,
 	S: 30,
 	R: 50,
 	year: 57,
 	d: 240,
 	rate_later: {
-		sony: 1.06,
-		rakuten: 1.06,
+		sony: 6,
+		rakuten: 6,
 	},
 	year_change_rate: 65,
 })
