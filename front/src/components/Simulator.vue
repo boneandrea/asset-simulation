@@ -63,11 +63,6 @@ const items = ref([
 		end_age: 57,
 	},
 ])
-const change = (e, a, b) => {
-	console.log(e, a)
-}
-const canvasRef = ref(null)
-const rendered = ref(false)
 const graphData = ref({
 	labels: [],
 	datasets: [],
@@ -100,6 +95,8 @@ const options = {
 		},
 	},
 }
+const canvasRef = ref(null)
+const rendered = ref(false)
 
 const init = () => {
 	if (canvasRef.value === null) return
@@ -114,40 +111,47 @@ const init = () => {
 	rendered.value = true
 }
 const chart = ref(null)
+const randomColor = () => Math.floor(Math.random() * 16777215).toString(16)
 const initGraph = () => {
 	graphData.value.labels.splice(0)
 	graphData.value.datasets.splice(0)
-	graphData.value.datasets.push(
-		{
+	items.value.forEach((i) => {
+		graphData.value.datasets.push({
 			label: 'データ',
 			data: [],
 			fill: false,
-			borderColor: 'rgb(75, 192, 192)',
+			borderColor: '#' + randomColor(),
 			tension: 0.1,
 			yAxisID: 'y',
-		},
-		{
-			label: 'データ',
-			data: [],
-			fill: false,
-			borderColor: '#a23456',
-			tension: 0.1,
-			yAxisID: 'y',
-		},
-		{
-			label: 'データ',
-			data: [],
-			fill: false,
-			borderColor: '#674373',
-			tension: 0.1,
-			yAxisID: 'y',
-		}
-	)
+		})
+	})
 }
 onMounted(() => {
 	initGraph()
 	init()
 })
+const add = () => {
+	items.value.push({
+		name: 'new',
+		rate1: 10,
+		rate2: 8,
+		start_year: 2024,
+		asset_start: 0,
+		pay_per_month: 5,
+		withdraw: 17,
+		year_change_rate: 62,
+		end_age: 60,
+	})
+	graphData.value.datasets.push({})
+	graphData.value.labels.push({
+		label: 'データ',
+		data: [],
+		fill: false,
+		borderColor: '#674373',
+		tension: 0.1,
+		yAxisID: 'y',
+	})
+}
 const update = () => {
 	chart.value.destroy()
 	const api = 'http://localhost:8888/cal.php'
