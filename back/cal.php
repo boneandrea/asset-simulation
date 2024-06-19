@@ -30,29 +30,37 @@ error_log(print_r($rate_later, true));
 $year_change_rate = $options["year_change_rate"] ?? 0;
 
 $sum_draw_per_year = [];
+
 $x = new Simulator(
     isCli: (php_sapi_name() === "cli"),
-    rate_sony:$rate_sony,
-    rate_rakuten:$rate_rakuten,
-    rate_later:$rate_later,
-    year_change_rate:$year_change_rate
 );
 $result = [];
 
 foreach($options as $option){
     error_log(print_r($option, true));
-
-    $result[$option["name"]] = $x->cal(
+    $name=$option["name"];
+    $result[] = $x->cal(
         json: true,
         name: $option["name"],
         asset:$option["asset_start"],
-        start_year: 2007,
-        stop_age: $option["end_age"],
+        start_year: $option["start_year"],
+        stop_age: intval($option["end_age"]),
         pay_per_year: $option["pay_per_month"]*12,
         withdraw_per_month:$option["withdraw"],
         year_change_rate:$option["year_change_rate"],
         option: $option,
     );
+
+// -$result["rakuten"] = $x->cal(
+// -    json: true,
+// -    paid_sum:1400,
+// -    name: "楽天",
+// -    asset:2400,
+// -    start_year:2024,
+// -    stop_age: $stop_year,
+// -    pay_per_year: $deposit_rakuten,
+// -    withdraw_per_month: $withdraw_rakuten
+
 }
 
 $x->dump_sum_draw();

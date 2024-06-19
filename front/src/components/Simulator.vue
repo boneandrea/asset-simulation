@@ -73,6 +73,7 @@ const items = ref([
 		name: 'sony',
 		rate1: 10,
 		rate2: 8,
+		start_year: 2007,
 		asset_start: 1000,
 		pay_per_month: 20,
 		withdraw: 20,
@@ -83,9 +84,10 @@ const items = ref([
 		name: 'rakuten',
 		rate1: 11,
 		rate2: 8,
+		start_year: 2019,
 		asset_start: 2900,
-		pay_per_month: 20,
-		withdraw: 20,
+		pay_per_month: 10,
+		withdraw: 60,
 		year_change_rate: 62,
 		end_age: 57,
 	},
@@ -94,8 +96,9 @@ const items = ref([
 		rate1: 30,
 		rate2: 8,
 		asset_start: 50,
-		pay_per_month: 20,
-		withdraw: 20,
+		start_year: 2024,
+		pay_per_month: 10,
+		withdraw: 80,
 		year_change_rate: 62,
 		end_age: 57,
 	},
@@ -118,8 +121,8 @@ const config = ref({
 })
 const canvasRef = ref(null)
 const rendered = ref(false)
-const data = ref({
-	labels: ['1月', '2月', '３月', '４月', '5月', '6月', '７月'],
+const graphData = ref({
+	labels: [],
 	datasets: [
 		{
 			label: 'データ',
@@ -134,6 +137,14 @@ const data = ref({
 			data: [],
 			fill: false,
 			borderColor: '#a23456',
+			tension: 0.1,
+			yAxisID: 'y',
+		},
+		{
+			label: 'データ',
+			data: [],
+			fill: false,
+			borderColor: '#674373',
 			tension: 0.1,
 			yAxisID: 'y',
 		},
@@ -191,7 +202,7 @@ const init = () => {
 	rendered.value = false
 	chart.value = new Chart(canvas, {
 		type: 'line',
-		data: data.value,
+		data: graphData.value,
 		options,
 	})
 	rendered.value = true
@@ -220,46 +231,41 @@ const update = () => {
 
 			// set labels
 			const xaxis = {}
-			r.rakuten.data.forEach((e) => (xaxis[e.year] = 1))
-			r.sony.data.forEach((e) => (xaxis[e.year] = 1))
+			//graphData.value.datasets.splice(0)
+			graphData.value.labels.splice(0)
+			r.slice(1, 2).forEach((data, index) => {
+				console.log(data)
+				data.data.forEach((e) => (xaxis[e.year] = 1))
 
-			const labels = Object.keys(xaxis)
-				.map((e) => parseInt(e))
-				.filter((year) => year >= 2024)
-			data.value.labels.splice(0, data.value.labels.length)
-			labels.forEach((y) => data.value.labels.push(`${y}/${y - BONE_AT}`))
+				const labels = Object.keys(xaxis)
+					.map((e) => parseInt(e))
+					.filter((year) => year >= 2024)
 
-			data.value.datasets[0].label = r.rakuten.name
-			data.value.datasets[0].data.splice(0, data.value.datasets[0].data.length)
-			r.rakuten.data
-				.filter((e) => e.year >= 2024)
-				.forEach((e) => {
-					data.value.datasets[0].data[labels.indexOf(e.year)] = e.asset
+				data.data.forEach((d) => graphData.value.labels.push(`${d.year}/${d.year - BONE_AT}`))
+
+				graphData.value.datasets[index].label = data.name
+				graphData.value.datasets[index].data.splice(0)
+				data.data
+					.filter((e) => e.year >= 2024)
+					.forEach((e) => {
+						graphData.value.datasets[index].data[labels.indexOf(e.year)] = e.asset
+					})
+				console.log(data.data)
+				console.log(graphData)
+				console.log(graphData.value)
+				graphData.value.datasets[3].label = 'TOTAL'
+				labels.forEach((y, i) => {
+					graphData.value.datasets[index].data[i] += 1
 				})
 
-			data.value.datasets[1].label = r.sony.name
-			data.value.datasets[1].data.splice(0, data.value.datasets[1].data.length)
-			r.sony.data
-				.filter((e) => e.year >= 2024)
-				.forEach((e) => {
-					data.value.datasets[1].data[labels.indexOf(e.year)] = e.asset
-				})
-
-			data.value.datasets[2].data.splice(0, data.value.datasets[2].data.length)
-			data.value.datasets[2].label = 'TOTAL'
-			labels.forEach((y, i) => {
-				data.value.datasets[2].data[i] = (data.value.datasets[0].data[i] ?? 0) + (data.value.datasets[1].data[i] ?? 0)
+				// 消費
+				/* data.value.datasets[3].data.splice(0, data.value.datasets[3].data.length)
+				            if (y - BONE_AT >= config.value.year) {
+					          data.value.datasets[3].data[i] = 0
+					          if (r[name].datasets[0].data[i] > 0) data.value.datasets[3].data[i] += items[i].withdraw * 12
+			              } */
 			})
 
-			// 消費
-			data.value.datasets[3].data.splice(0, data.value.datasets[3].data.length)
-			labels.forEach((y, i) => {
-				if (y - BONE_AT >= config.value.year) {
-					data.value.datasets[3].data[i] = 0
-					if (data.value.datasets[0].data[i] > 0) data.value.datasets[3].data[i] += config.value.R * 12
-					if (data.value.datasets[1].data[i] > 0) data.value.datasets[3].data[i] += config.value.S * 12
-				}
-			})
 			init()
 		})
 		.catch((e) => {

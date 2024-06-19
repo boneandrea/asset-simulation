@@ -10,11 +10,6 @@ function eecho($s)
 
 class Simulator
 {
-    public $sum_draw_per_year = [];
-    private $isCLI;
-    private $rate_rakuten;
-    private $rate_sony;
-    private $rate_later;
 
     public function __construct(
         $isCli = false,
@@ -23,11 +18,6 @@ class Simulator
         $rate_later = 1.06,
         $year_change_rate = 65
     ) {
-        $this->isCLI = $isCli;
-        $this->rate_sony = $rate_sony;
-        $this->rate_rakuten = $rate_rakuten;
-        $this->rate_later = $rate_later;
-        $this->year_change_rate = $year_change_rate;
     }
 
     public function cal(
@@ -43,12 +33,10 @@ class Simulator
         $year_change_rate=57,
         $option=[],
     ) {
+        $this->sum_draw_per_year = [];
         $this->year_change_rate = $year_change_rate;
         $asset = intval($asset);
-        error_log($asset);
-        error_log($asset);
-        error_log($asset);
-
+        error_log(" $asset");
         $result = [
             "data" => []
         ];
@@ -58,7 +46,6 @@ class Simulator
         $sum_withdraw = 0;
 
         for($i = 0;$i < $range;$i++) {
-            error_log("YYYY $asset");
             $age = $i + $start_year - BONE_AT;
             $sep = ($i + $start_year === $current_year) ? "+++ now" : "";
             if(($i - 1) % 5 === 0) {
@@ -77,19 +64,19 @@ class Simulator
 
             // 取り崩し計算
             if($age > $stop_age) {
-                error_log("MINUS");
-                $asset -= $withdraw_per_month * 12;
+                $withdraw_per_year=$withdraw_per_month * 12;
+                error_log("MINUS $withdraw_per_year");
+                $asset -= $withdraw_per_year;
                 if(!isset($this->sum_draw_per_year[$age])) {
                     $this->sum_draw_per_year[$age] = 0;
                 }
-                $this->sum_draw_per_year[$age] += $withdraw_per_month * 12;
-                $sum_withdraw += $withdraw_per_month * 12;
+                $this->sum_draw_per_year[$age] += $withdraw_per_year;
+                $sum_withdraw += $withdraw_per_year;
             } else {
                 $asset = $asset + $pay_per_year;
             }
-            error_log("YYYY $asset");
             $asset *= $this->change_rate_simulation($age, $name,$option);
-            error_log("YYYY $asset");
+            error_log("YYYY {$pay_per_year} {$asset}");
 
             // cal tax
             // 購入額を上回るまでは非課税
@@ -150,7 +137,8 @@ class Simulator
     public function change_rate_simulation($age, $name, $option)
     {
         $rate= $age > $this->year_change_rate ? $option["rate2"] :$option["rate1"];
-        return (float)$rate /100;
+        error_log(1+(float)$rate /100);
+        return 1+(float)$rate /100;
     }
 
     public function dump_sum_draw()

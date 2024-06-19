@@ -39,6 +39,15 @@
 				@input="change"
 			/>
 			<input
+				v-model="data.start_year"
+				type="number"
+				class="form-control"
+				min="50"
+				placeholder="投資開始年"
+				title="投資開始年"
+				@input="change"
+			/>
+			<input
 				v-model="data.end_age"
 				type="number"
 				class="form-control"
