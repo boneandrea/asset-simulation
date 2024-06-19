@@ -50,17 +50,6 @@ foreach($options as $option){
         year_change_rate:$option["year_change_rate"],
         option: $option,
     );
-
-// -$result["rakuten"] = $x->cal(
-// -    json: true,
-// -    paid_sum:1400,
-// -    name: "楽天",
-// -    asset:2400,
-// -    start_year:2024,
-// -    stop_age: $stop_year,
-// -    pay_per_year: $deposit_rakuten,
-// -    withdraw_per_month: $withdraw_rakuten
-
 }
 
 $x->dump_sum_draw();

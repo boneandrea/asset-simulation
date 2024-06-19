@@ -36,7 +36,6 @@ class Simulator
         $this->sum_draw_per_year = [];
         $this->year_change_rate = $year_change_rate;
         $asset = intval($asset);
-        error_log(" $asset");
         $result = [
             "data" => []
         ];
@@ -65,7 +64,6 @@ class Simulator
             // 取り崩し計算
             if($age > $stop_age) {
                 $withdraw_per_year=$withdraw_per_month * 12;
-                error_log("MINUS [$age] $withdraw_per_year");
                 $asset -= $withdraw_per_year;
                 if(!isset($this->sum_draw_per_year[$age])) {
                     $this->sum_draw_per_year[$age] = 0;
@@ -73,11 +71,9 @@ class Simulator
                 $this->sum_draw_per_year[$age] += $withdraw_per_year;
                 $sum_withdraw += $withdraw_per_year;
             } else {
-                error_log("PLUS [$age] $pay_per_year");
                 $asset = $asset + $pay_per_year;
             }
             $asset *= $this->change_rate_simulation($age, $name,$option);
-            error_log("YYYY {$pay_per_year} {$asset}");
 
             // cal tax
             // 購入額を上回るまでは非課税
@@ -104,7 +100,6 @@ class Simulator
                 "sep" => $sep,
             ];
             if($asset <= 0) {
-                error_log("____ $asset");
 
                 break;
             }
@@ -138,7 +133,6 @@ class Simulator
     public function change_rate_simulation($age, $name, $option)
     {
         $rate= $age > $this->year_change_rate ? $option["rate2"] :$option["rate1"];
-        error_log(1+(float)$rate /100);
         return 1+(float)$rate /100;
     }
 
