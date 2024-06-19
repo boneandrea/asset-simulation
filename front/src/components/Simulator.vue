@@ -90,12 +90,12 @@ const options = {
 			position: 'right',
 			title: {
 				display: true,
-				text: '年額(万)',
+				text: '年/月額(万)',
 			},
 			ticks: {
-				//callback: function(value, index, ticks) {
-				//return `${value}万`
-				//}
+				callback: function (value, index, ticks) {
+					return `${value} / ${Math.round(value / 12)}`
+				},
 			},
 		},
 	},
