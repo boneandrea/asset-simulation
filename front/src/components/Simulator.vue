@@ -56,7 +56,7 @@ const options = {
 			position: 'right',
 			title: {
 				display: true,
-				text: '年/月額(万)',
+				text: '年/月額(万) : 税引前',
 			},
 			ticks: {
 				callback: function (value, index, ticks) {
@@ -157,7 +157,7 @@ const update = () => {
 			console.clear()
 			configureGraph()
 
-			const YEAR = 2024
+			const CURRENT_YEAR = new Date().getFullYear()
 			const collectXaxis = {}
 			r.forEach((data, index) => {
 				data.data.forEach((e) => (collectXaxis[e.year] = true))
@@ -166,7 +166,7 @@ const update = () => {
 			const labels = Object.keys(collectXaxis)
 				.map((e) => parseInt(e))
 				.sort()
-				.filter((year) => year >= YEAR)
+				.filter((year) => year >= CURRENT_YEAR)
 			labels.forEach((d) => graphData.value.labels.push(`${d}/${d - BONE_AT}`))
 
 			const SUM_GRAPH_INDEX = r.length
@@ -194,7 +194,7 @@ const update = () => {
 			r.forEach((data, index) => {
 				graphData.value.datasets[index].label = data.name
 				data.data
-					.filter((e) => e.year >= YEAR)
+					.filter((e) => e.year >= CURRENT_YEAR)
 					.forEach((e, i) => {
 						// 自グラフ
 						graphData.value.datasets[index].data[labels.indexOf(e.year)] = e.asset
