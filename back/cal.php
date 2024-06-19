@@ -12,32 +12,12 @@ $body = file_get_contents("php://input");
 $json = json_decode($body, true);
 $options = $json["data"] ?? [];
 
-$rate_rakuten = 1 + (float)($options["r"] ?? 10) / 100;
-$rate_sony = 1 + (float)($options["s"] ?? 10) / 100;
-
-$deposit_rakuten = (float)($options["d"] ?? 250);
-$stop_year = (int)($options["year"] ?? 57);
-
-$withdraw_rakuten = (float)($options["R"] ?? 50);
-$withdraw_sony = (float)($options["S"] ?? 28);
-
-$rate_later = [
-    "sony" => 1 + (float)$options["rate_later"]["sony"] / 100,
-    "rakuten" => 1 + (float)$options["rate_later"]["rakuten"] / 100
-];
-error_log(print_r($rate_later, true));
-
-$year_change_rate = $options["year_change_rate"] ?? 0;
-
-$sum_draw_per_year = [];
-
 $x = new Simulator(
     isCli: (php_sapi_name() === "cli"),
 );
 $result = [];
 
 foreach($options as $option){
-    error_log(print_r($option, true));
     $name=$option["name"];
     $result[] = $x->cal(
         json: true,
