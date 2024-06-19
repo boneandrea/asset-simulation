@@ -30,8 +30,8 @@ const items = ref([
 		rate2: 8,
 		start_year: 2007,
 		asset_start: 0,
-		pay_per_month: 1.8,
-		withdraw: 20,
+		pay_per_month: 1.55,
+		withdraw: 17,
 		year_change_rate: 62,
 		end_age: 60,
 	},
@@ -41,8 +41,8 @@ const items = ref([
 		rate2: 8,
 		start_year: 2024,
 		asset_start: 2900,
-		pay_per_month: 10,
-		withdraw: 60,
+		pay_per_month: 20,
+		withdraw: 62,
 		year_change_rate: 62,
 		end_age: 57,
 	},
@@ -53,7 +53,7 @@ const items = ref([
 		asset_start: 50,
 		start_year: 2024,
 		pay_per_month: 10,
-		withdraw: 40,
+		withdraw: 39,
 		year_change_rate: 62,
 		end_age: 57,
 	},
@@ -61,19 +61,6 @@ const items = ref([
 const change = (e, a, b) => {
 	console.log(e, a)
 }
-const config = ref({
-	s: 10,
-	r: 11,
-	S: 20,
-	R: 50,
-	year: 57,
-	d: 240,
-	rate_later: {
-		sony: 6,
-		rakuten: 6,
-	},
-	year_change_rate: 65,
-})
 const canvasRef = ref(null)
 const rendered = ref(false)
 const graphData = ref({
@@ -102,22 +89,6 @@ const graphData = ref({
 			borderColor: '#674373',
 			tension: 0.1,
 			yAxisID: 'y',
-		},
-		{
-			label: 'total',
-			data: [],
-			fill: false,
-			borderColor: '#E74C3C',
-			tension: 0.1,
-			yAxisID: 'y',
-		},
-		{
-			label: '浪費',
-			data: [],
-			fill: false,
-			borderColor: '#11bC3C',
-			tension: 0.1,
-			yAxisID: 'y1', // 追加
 		},
 	],
 })
@@ -187,10 +158,9 @@ const update = () => {
 			// set labels
 			const xaxis = {}
 			console.clear()
-			//graphData.value.datasets.splice(0)
 			graphData.value.labels.splice(0)
 			graphData.value.datasets.forEach((_d, i) => graphData.value.datasets[i].data.splice(0))
-			graphData.value.datasets[3].label = 'TOTAL'
+
 			const YEAR = 2024
 			const collectXaxis = {}
 			r.forEach((data, index) => {
@@ -202,6 +172,27 @@ const update = () => {
 				.sort()
 				.filter((year) => year >= YEAR)
 			labels.forEach((d) => graphData.value.labels.push(`${d}/${d - BONE_AT}`))
+			const num_items = r.length
+			const SUM_GRAPH_INDEX = r.length
+			const SPENT_GRAPH_INDEX = r.length + 1
+			graphData.value.datasets.push(
+				{
+					label: 'TOTAL',
+					data: [],
+					fill: false,
+					borderColor: '#E74C3C',
+					tension: 0.1,
+					yAxisID: 'y',
+				},
+				{
+					label: '浪費',
+					data: [],
+					fill: false,
+					borderColor: '#11bC3C',
+					tension: 0.1,
+					yAxisID: 'y1', // 追加
+				}
+			)
 
 			r.forEach((data, index) => {
 				console.log(data)
@@ -213,22 +204,19 @@ const update = () => {
 						// 自グラフ
 						graphData.value.datasets[index].data[labels.indexOf(e.year)] = e.asset
 						// total
-						graphData.value.datasets[3].data[i] = (graphData.value.datasets[3].data[i] ?? 0) + e.asset
+						graphData.value.datasets[SUM_GRAPH_INDEX].data[i] =
+							(graphData.value.datasets[SUM_GRAPH_INDEX].data[i] ?? 0) + e.asset
+
 						// 消費
-						graphData.value.datasets[4].data[i] = (graphData.value.datasets[4].data[i] ?? 0) + e.withdraw * 12
+						if (e.year >= BONE_AT + 57) {
+							console.log(Array.from(items.value))
+							const sum = e.asset > items.value[index].withdraw * 12 ? items.value[index].withdraw * 12 : e.asset
+							graphData.value.datasets[SPENT_GRAPH_INDEX].data[i] =
+								(graphData.value.datasets[SPENT_GRAPH_INDEX].data[i] ?? 0) + sum
+						}
 					})
-				console.log(data.data)
-				console.log(graphData)
-				console.log(graphData.value)
-
-				/* if (y - BONE_AT >= config.value.year) {
-
-			              } */
 			})
 
-			console.log(graphData.value.datasets[0])
-			console.log(graphData.value.datasets[3])
-			console.log(graphData.value.datasets[4])
 			init()
 		})
 		.catch((e) => {
