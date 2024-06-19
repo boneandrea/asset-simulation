@@ -84,7 +84,7 @@ const initGraph = () => {
 	graphData.value.datasets.splice(0)
 	items.value.forEach((i) => {
 		graphData.value.datasets.push({
-			label: 'データ',
+			label: i.name,
 			data: [],
 			fill: false,
 			borderColor: '#' + randomColor(),
