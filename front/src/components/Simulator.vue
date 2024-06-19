@@ -176,6 +176,7 @@ const update = () => {
 					label: 'TOTAL',
 					data: [],
 					fill: false,
+					borderWidth: 4,
 					borderColor: '#E74C3C',
 					tension: 0.1,
 					yAxisID: 'y',
