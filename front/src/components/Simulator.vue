@@ -4,14 +4,14 @@
 	</div>
 	<hr />
 	<div @keyup.enter="update">
-		<Input v-for="(item, index) in items" :id="index" :data="item" @change="change" />
+		<Input v-for="(item, index) in items" :id="index" :data="item" @change="change" @remove="remove" />
 	</div>
 	<div class="row">
 		<div class="col">
 			<button class="btn btn-primary" :disable="rendered" @click="update">Update</button>
 		</div>
 		<div class="col">
-			<button class="btn btn-primary" :disable="rendered" @click="add">Add new</button>
+			<button class="btn btn-primary" :disable="rendered" @click="add">Add new <i class="bi bi-trash-fill"></i></button>
 		</div>
 	</div>
 </template>
@@ -130,6 +130,14 @@ onMounted(() => {
 	initGraph()
 	init()
 })
+const remove = (e) => {
+	const index = items.value.findIndex((item) => item.name === e.name)
+	if (index !== -1) {
+		items.value.splice(index, 1)
+		graphData.value.datasets.splice(index, 1)
+		graphData.value.labels.splice(index, 1)
+	}
+}
 const add = () => {
 	items.value.push({
 		name: 'new',
@@ -210,8 +218,6 @@ const update = () => {
 			)
 
 			r.forEach((data, index) => {
-				console.log(data)
-
 				graphData.value.datasets[index].label = data.name
 				data.data
 					.filter((e) => e.year >= YEAR)
@@ -224,7 +230,6 @@ const update = () => {
 
 						// 消費
 						if (e.year >= BONE_AT + 57) {
-							console.log(Array.from(items.value))
 							const sum = e.asset > items.value[index].withdraw * 12 ? items.value[index].withdraw * 12 : e.asset
 							graphData.value.datasets[SPENT_GRAPH_INDEX].data[i] =
 								(graphData.value.datasets[SPENT_GRAPH_INDEX].data[i] ?? 0) + sum
