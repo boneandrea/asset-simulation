@@ -29,11 +29,15 @@ import Input from './Input.vue'
 Chart.register(...registerables)
 
 const BONE_AT = 1973
+
+// データ
 const items = ref(defaultItems)
 const graphData = ref({
 	labels: [],
 	datasets: [],
 })
+
+// グラフ設定
 const options = {
 	responsive: true,
 	scales: {
@@ -62,10 +66,13 @@ const options = {
 		},
 	},
 }
+const randomColor = () => '#' + Math.floor(Math.random() * 16777215).toString(16)
+const chart = ref(null)
 const canvasRef = ref(null)
 const rendered = ref(false)
 
-const init = () => {
+// ページ初期化
+const renderGraph = () => {
 	if (canvasRef.value === null) return
 	const canvas = canvasRef.value.getContext('2d')
 	if (canvas === null) return
@@ -77,9 +84,9 @@ const init = () => {
 	})
 	rendered.value = true
 }
-const chart = ref(null)
-const randomColor = () => Math.floor(Math.random() * 16777215).toString(16)
-const initGraph = () => {
+
+// グラフ設定
+const configureGraph = () => {
 	graphData.value.labels.splice(0)
 	graphData.value.datasets.splice(0)
 	items.value.forEach((i) => {
@@ -87,15 +94,16 @@ const initGraph = () => {
 			label: i.name,
 			data: [],
 			fill: false,
-			borderColor: '#' + randomColor(),
+			borderColor: randomColor(),
 			tension: 0.1,
 			yAxisID: 'y',
 		})
 	})
 }
 onMounted(() => {
-	init()
+	renderGraph()
 })
+
 const remove = (e) => {
 	const index = items.value.findIndex((item) => item.name === e.name)
 	if (index !== -1) {
@@ -107,12 +115,12 @@ const remove = (e) => {
 const add = () => {
 	items.value.push({
 		name: 'new',
-		rate1: 10,
-		rate2: 8,
+		rate1: 0,
+		rate2: 0,
 		start_year: 2024,
 		asset_start: 0,
-		pay_per_month: 5,
-		withdraw: 17,
+		pay_per_month: 0,
+		withdraw: 0,
 		year_change_rate: 62,
 		end_age: 60,
 	})
@@ -121,8 +129,8 @@ const add = () => {
 		label: 'データ',
 		data: [],
 		fill: false,
-		borderColor: '#674373',
-		tension: 0.1,
+		borderColor: randomColor(),
+		tension: 1,
 		yAxisID: 'y',
 	})
 }
@@ -147,8 +155,7 @@ const update = () => {
 			// set labels
 			const xaxis = {}
 			console.clear()
-			initGraph()
-			graphData.value.datasets.forEach((_d, i) => graphData.value.datasets[i].data.splice(0))
+			configureGraph()
 
 			const YEAR = 2024
 			const collectXaxis = {}
@@ -161,7 +168,7 @@ const update = () => {
 				.sort()
 				.filter((year) => year >= YEAR)
 			labels.forEach((d) => graphData.value.labels.push(`${d}/${d - BONE_AT}`))
-			const num_items = r.length
+
 			const SUM_GRAPH_INDEX = r.length
 			const SPENT_GRAPH_INDEX = r.length + 1
 			graphData.value.datasets.push(
@@ -204,7 +211,7 @@ const update = () => {
 					})
 			})
 
-			init()
+			renderGraph()
 		})
 		.catch((e) => {
 			console.error(e)
