@@ -33,4 +33,4 @@ const defaultItems = [
 		end_age: 57,
 	},
 ]
-export default defaultItems
+export { defaultItems }
