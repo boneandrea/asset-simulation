@@ -12,8 +12,6 @@ $body = file_get_contents("php://input");
 $json = json_decode($body, true);
 $options = $json["data"] ?? [];
 
-error_log(print_r($options, true));
-
 $rate_rakuten = 1 + (float)($options["r"] ?? 10) / 100;
 $rate_sony = 1 + (float)($options["s"] ?? 10) / 100;
 
@@ -40,27 +38,22 @@ $x = new Simulator(
     year_change_rate:$year_change_rate
 );
 $result = [];
-$result["sony"] = $x->cal(
-    json: true,
-    name: "ソニー",
-    asset:0,
-    pay_per_year: 18.66,
-    start_year: 2007,
-    stop_age: 65,
-    withdraw_per_month: $withdraw_sony
-);
 
+foreach($options as $option){
+    error_log(print_r($option, true));
 
-$result["rakuten"] = $x->cal(
-    json: true,
-    paid_sum:1400,
-    name: "楽天",
-    asset:2400,
-    start_year:2024,
-    stop_age: $stop_year,
-    pay_per_year: $deposit_rakuten,
-    withdraw_per_month: $withdraw_rakuten
-);
+    $result[$option["name"]] = $x->cal(
+        json: true,
+        name: $option["name"],
+        asset:$option["asset_start"],
+        start_year: 2007,
+        stop_age: $option["end_age"],
+        pay_per_year: $option["pay_per_month"]*12,
+        withdraw_per_month:$option["withdraw"],
+        year_change_rate:$option["year_change_rate"],
+        option: $option,
+    );
+}
 
 $x->dump_sum_draw();
 

@@ -35,12 +35,20 @@ class Simulator
         $name = "",
         $paid_sum = 0,
         $asset = 0,
-        $range = 200,
+        $range = 200, // ありえない値
         $withdraw_per_month = 0,
         $pay_per_year = 0,
         $start_year = 0,
         $stop_age = 99999, // ありえない値
+        $year_change_rate=57,
+        $option=[],
     ) {
+        $this->year_change_rate = $year_change_rate;
+        $asset = intval($asset);
+        error_log($asset);
+        error_log($asset);
+        error_log($asset);
+
         $result = [
             "data" => []
         ];
@@ -50,6 +58,7 @@ class Simulator
         $sum_withdraw = 0;
 
         for($i = 0;$i < $range;$i++) {
+            error_log("YYYY $asset");
             $age = $i + $start_year - BONE_AT;
             $sep = ($i + $start_year === $current_year) ? "+++ now" : "";
             if(($i - 1) % 5 === 0) {
@@ -68,6 +77,7 @@ class Simulator
 
             // 取り崩し計算
             if($age > $stop_age) {
+                error_log("MINUS");
                 $asset -= $withdraw_per_month * 12;
                 if(!isset($this->sum_draw_per_year[$age])) {
                     $this->sum_draw_per_year[$age] = 0;
@@ -77,8 +87,9 @@ class Simulator
             } else {
                 $asset = $asset + $pay_per_year;
             }
-
-            $asset *= $this->change_rate_simulation($age, $name);
+            error_log("YYYY $asset");
+            $asset *= $this->change_rate_simulation($age, $name,$option);
+            error_log("YYYY $asset");
 
             // cal tax
             // 購入額を上回るまでは非課税
@@ -105,12 +116,15 @@ class Simulator
                 "sep" => $sep,
             ];
             if($asset <= 0) {
+                error_log("____ $asset");
+
                 break;
             }
             if($age > 150) {
                 break;
             }
         }
+        error_log(print_r($result,true));
         return $result;
     }
 
@@ -133,16 +147,10 @@ class Simulator
         }
     }
 
-    public function change_rate_simulation($age, $name)
+    public function change_rate_simulation($age, $name, $option)
     {
-
-        if($name === "ソニー") {
-            return $age > $this->year_change_rate ? $this->rate_later["sony"] : $this->rate_sony;
-        }
-
-        if($name === "楽天") {
-            return $age > $this->year_change_rate ? $this->rate_later["rakuten"] : $this->rate_rakuten;
-        }
+        $rate= $age > $this->year_change_rate ? $option["rate2"] :$option["rate1"];
+        return (float)$rate /100;
     }
 
     public function dump_sum_draw()

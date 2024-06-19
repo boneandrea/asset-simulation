@@ -28,7 +28,7 @@
 				type="number"
 				min="0"
 				class="form-control"
-				placeholder="65からの低減yield % (sony)"
+				placeholder="低減yield % (sony)"
 			/>
 		</div>
 		<div class="input-group mb-3">
@@ -37,7 +37,7 @@
 				type="number"
 				min="0"
 				class="form-control"
-				placeholder="65からの低減yield % (rakuten)"
+				placeholder="低減yield % (rakuten)"
 			/>
 		</div>
 		<div class="input-group mb-3">
@@ -49,6 +49,7 @@
 				min="50"
 			/>
 		</div>
+		<Input v-for="(item, index) in items" :id="index" :data="item" @change="change" />
 	</div>
 	<div class="input-group mb-3">
 		<button class="btn btn-primary" :disable="rendered" @click="update">Update</button>
@@ -63,13 +64,49 @@ defineProps({
 })
 import { ref, onMounted } from 'vue'
 import { Chart, registerables } from 'chart.js'
+import Input from './Input.vue'
 Chart.register(...registerables)
 
 const BONE_AT = 1973
+const items = ref([
+	{
+		name: 'sony',
+		rate1: 10,
+		rate2: 8,
+		asset_start: 1000,
+		pay_per_month: 20,
+		withdraw: 20,
+		year_change_rate: 62,
+		end_age: 60,
+	},
+	{
+		name: 'rakuten',
+		rate1: 11,
+		rate2: 8,
+		asset_start: 2900,
+		pay_per_month: 20,
+		withdraw: 20,
+		year_change_rate: 62,
+		end_age: 57,
+	},
+	{
+		name: 'india',
+		rate1: 30,
+		rate2: 8,
+		asset_start: 50,
+		pay_per_month: 20,
+		withdraw: 20,
+		year_change_rate: 62,
+		end_age: 57,
+	},
+])
+const change = (e, a, b) => {
+	console.log(e, a)
+}
 const config = ref({
 	s: 10,
 	r: 11,
-	S: 30,
+	S: 20,
 	R: 50,
 	year: 57,
 	d: 240,
@@ -170,7 +207,7 @@ const update = () => {
 		method: 'POST',
 		headers: { 'content-type': 'application/json' },
 		body: JSON.stringify({
-			data: config.value,
+			data: items.value,
 		}),
 	})
 		.then((response) => {
