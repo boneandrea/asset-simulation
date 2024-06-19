@@ -186,41 +186,49 @@ const update = () => {
 
 			// set labels
 			const xaxis = {}
+			console.clear()
 			//graphData.value.datasets.splice(0)
 			graphData.value.labels.splice(0)
-			r.slice(2, 3).forEach((data, index) => {
+			graphData.value.datasets.forEach((_d, i) => graphData.value.datasets[i].data.splice(0))
+			graphData.value.datasets[3].label = 'TOTAL'
+			const YEAR = 2024
+			const collectXaxis = {}
+			r.forEach((data, index) => {
+				data.data.forEach((e) => (collectXaxis[e.year] = true))
+			})
+
+			const labels = Object.keys(collectXaxis)
+				.map((e) => parseInt(e))
+				.sort()
+				.filter((year) => year >= YEAR)
+			labels.forEach((d) => graphData.value.labels.push(`${d}/${d - BONE_AT}`))
+
+			r.forEach((data, index) => {
 				console.log(data)
-				data.data.forEach((e) => (xaxis[e.year] = 1))
-
-				const labels = Object.keys(xaxis)
-					.map((e) => parseInt(e))
-					.filter((year) => year >= 2024)
-
-				data.data.forEach((d) => graphData.value.labels.push(`${d.year}/${d.year - BONE_AT}`))
 
 				graphData.value.datasets[index].label = data.name
-				graphData.value.datasets[index].data.splice(0)
 				data.data
-					.filter((e) => e.year >= 2024)
-					.forEach((e) => {
+					.filter((e) => e.year >= YEAR)
+					.forEach((e, i) => {
+						// 自グラフ
 						graphData.value.datasets[index].data[labels.indexOf(e.year)] = e.asset
+						// total
+						graphData.value.datasets[3].data[i] = (graphData.value.datasets[3].data[i] ?? 0) + e.asset
+						// 消費
+						graphData.value.datasets[4].data[i] = (graphData.value.datasets[4].data[i] ?? 0) + e.withdraw * 12
 					})
 				console.log(data.data)
 				console.log(graphData)
 				console.log(graphData.value)
-				graphData.value.datasets[3].label = 'TOTAL'
-				labels.forEach((y, i) => {
-					graphData.value.datasets[index].data[i] += 1
-				})
 
-				// 消費
-				/* data.value.datasets[3].data.splice(0, data.value.datasets[3].data.length)
-				            if (y - BONE_AT >= config.value.year) {
-					          data.value.datasets[3].data[i] = 0
-					          if (r[name].datasets[0].data[i] > 0) data.value.datasets[3].data[i] += items[i].withdraw * 12
+				/* if (y - BONE_AT >= config.value.year) {
+
 			              } */
 			})
 
+			console.log(graphData.value.datasets[0])
+			console.log(graphData.value.datasets[3])
+			console.log(graphData.value.datasets[4])
 			init()
 		})
 		.catch((e) => {
