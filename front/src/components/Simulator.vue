@@ -24,45 +24,12 @@ defineProps({
 })
 import { ref, onMounted } from 'vue'
 import { Chart, registerables } from 'chart.js'
+import defaultItems from './items.js'
 import Input from './Input.vue'
 Chart.register(...registerables)
 
 const BONE_AT = 1973
-const items = ref([
-	{
-		name: 'sony',
-		rate1: 10,
-		rate2: 8,
-		start_year: 2007,
-		asset_start: 0,
-		pay_per_month: 1.55,
-		withdraw: 17,
-		year_change_rate: 62,
-		end_age: 60,
-	},
-	{
-		name: 'rakuten',
-		rate1: 11,
-		rate2: 8,
-		start_year: 2024,
-		asset_start: 2900,
-		pay_per_month: 20,
-		withdraw: 62,
-		year_change_rate: 62,
-		end_age: 57,
-	},
-	{
-		name: 'india',
-		rate1: 30,
-		rate2: 8,
-		asset_start: 50,
-		start_year: 2024,
-		pay_per_month: 10,
-		withdraw: 39,
-		year_change_rate: 62,
-		end_age: 57,
-	},
-])
+const items = ref(defaultItems)
 const graphData = ref({
 	labels: [],
 	datasets: [],
@@ -224,6 +191,7 @@ const update = () => {
 					.forEach((e, i) => {
 						// 自グラフ
 						graphData.value.datasets[index].data[labels.indexOf(e.year)] = e.asset
+
 						// total
 						graphData.value.datasets[SUM_GRAPH_INDEX].data[i] =
 							(graphData.value.datasets[SUM_GRAPH_INDEX].data[i] ?? 0) + e.asset
