@@ -11,7 +11,7 @@
 			<button class="btn btn-primary" :disable="rendered" @click="update">Update</button>
 		</div>
 		<div class="col">
-			<button class="btn btn-primary" :disable="rendered" @click="add">Add new <i class="bi bi-trash-fill"></i></button>
+			<button class="btn btn-primary" :disable="rendered" @click="add">Add new</button>
 		</div>
 	</div>
 </template>

@@ -1,10 +1,12 @@
 <template>
 	<div class="row">
 		<div class="col-md-2">
-			<button class="btn btn-primary" :disable="rendered" @click="remove">remove</button>
-		</div>
-		<div class="col-md-2">
-			<input class="form-control" v-model="data.name" />
+			<div class="input-group mb-3">
+				<button class="btn btn-danger" :disable="rendered" @click="remove">
+					<i class="bi bi-trash"></i>
+				</button>
+				<input class="form-control" v-model="data.name" placeholder="name" />
+			</div>
 		</div>
 		<div class="col-ms-10">
 			<div class="input-group mb-3">
