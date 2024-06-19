@@ -16,7 +16,7 @@ const defaultItems = [
 		rate2: 8,
 		start_year: 2024,
 		asset_start: 2900,
-		pay_per_month: 20,
+		pay_per_month: 10,
 		withdraw: 62,
 		year_change_rate: 62,
 		end_age: 57,
