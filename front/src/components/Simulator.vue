@@ -6,8 +6,13 @@
 	<div @keyup.enter="update">
 		<Input v-for="(item, index) in items" :id="index" :data="item" @change="change" />
 	</div>
-	<div class="input-group mb-3">
-		<button class="btn btn-primary" :disable="rendered" @click="update">Update</button>
+	<div class="row">
+		<div class="col">
+			<button class="btn btn-primary" :disable="rendered" @click="update">Update</button>
+		</div>
+		<div class="col">
+			<button class="btn btn-primary" :disable="rendered" @click="add">Add new</button>
+		</div>
 	</div>
 </template>
 <script setup>
@@ -65,32 +70,7 @@ const canvasRef = ref(null)
 const rendered = ref(false)
 const graphData = ref({
 	labels: [],
-	datasets: [
-		{
-			label: 'データ',
-			data: [],
-			fill: false,
-			borderColor: 'rgb(75, 192, 192)',
-			tension: 0.1,
-			yAxisID: 'y',
-		},
-		{
-			label: 'データ',
-			data: [],
-			fill: false,
-			borderColor: '#a23456',
-			tension: 0.1,
-			yAxisID: 'y',
-		},
-		{
-			label: 'データ',
-			data: [],
-			fill: false,
-			borderColor: '#674373',
-			tension: 0.1,
-			yAxisID: 'y',
-		},
-	],
+	datasets: [],
 })
 const options = {
 	responsive: true,
@@ -134,7 +114,38 @@ const init = () => {
 	rendered.value = true
 }
 const chart = ref(null)
+const initGraph = () => {
+	graphData.value.labels.splice(0)
+	graphData.value.datasets.splice(0)
+	graphData.value.datasets.push(
+		{
+			label: 'データ',
+			data: [],
+			fill: false,
+			borderColor: 'rgb(75, 192, 192)',
+			tension: 0.1,
+			yAxisID: 'y',
+		},
+		{
+			label: 'データ',
+			data: [],
+			fill: false,
+			borderColor: '#a23456',
+			tension: 0.1,
+			yAxisID: 'y',
+		},
+		{
+			label: 'データ',
+			data: [],
+			fill: false,
+			borderColor: '#674373',
+			tension: 0.1,
+			yAxisID: 'y',
+		}
+	)
+}
 onMounted(() => {
+	initGraph()
 	init()
 })
 const update = () => {
@@ -158,7 +169,7 @@ const update = () => {
 			// set labels
 			const xaxis = {}
 			console.clear()
-			graphData.value.labels.splice(0)
+			initGraph()
 			graphData.value.datasets.forEach((_d, i) => graphData.value.datasets[i].data.splice(0))
 
 			const YEAR = 2024
