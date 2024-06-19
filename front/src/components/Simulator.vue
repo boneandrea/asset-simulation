@@ -94,7 +94,6 @@ const initGraph = () => {
 	})
 }
 onMounted(() => {
-	initGraph()
 	init()
 })
 const remove = (e) => {
