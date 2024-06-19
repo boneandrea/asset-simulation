@@ -4,51 +4,6 @@
 	</div>
 	<hr />
 	<div @keyup.enter="update">
-		<div class="input-group mb-3">
-			<input v-model="config.s" type="number" class="form-control" min="0" placeholder="sony yield % (e.g.: 10)" />
-		</div>
-		<div class="input-group mb-3">
-			<input v-model="config.r" type="number" class="form-control" min="0" placeholder="楽天 yield % (e.g.: 11)" />
-		</div>
-		<div class="input-group mb-3">
-			<input v-model="config.d" type="number" class="form-control" step="10" min="0" placeholder="楽天 年間積立" />
-		</div>
-		<div class="input-group mb-3">
-			<input v-model="config.S" type="number" min="0" class="form-control" placeholder="sony 取り崩し/month" />
-		</div>
-		<div class="input-group mb-3">
-			<input v-model="config.R" type="number" class="form-control" min="0" placeholder="楽天 取り崩し/month" />
-		</div>
-		<div class="input-group mb-3">
-			<input v-model="config.year" type="number" class="form-control" min="55" placeholder="楽天終了年齢" />
-		</div>
-		<div class="input-group mb-3">
-			<input
-				v-model="config.rate_later.sony"
-				type="number"
-				min="0"
-				class="form-control"
-				placeholder="低減yield % (sony)"
-			/>
-		</div>
-		<div class="input-group mb-3">
-			<input
-				v-model="config.rate_later.rakuten"
-				type="number"
-				min="0"
-				class="form-control"
-				placeholder="低減yield % (rakuten)"
-			/>
-		</div>
-		<div class="input-group mb-3">
-			<input
-				v-model="config.year_change_rate"
-				type="number"
-				class="form-control"
-				placeholder="低減レートになる年齢"
-				min="50"
-			/>
-		</div>
 		<Input v-for="(item, index) in items" :id="index" :data="item" @change="change" />
 	</div>
 	<div class="input-group mb-3">
