@@ -233,7 +233,7 @@ const update = () => {
 			const xaxis = {}
 			//graphData.value.datasets.splice(0)
 			graphData.value.labels.splice(0)
-			r.slice(1, 2).forEach((data, index) => {
+			r.slice(2, 3).forEach((data, index) => {
 				console.log(data)
 				data.data.forEach((e) => (xaxis[e.year] = 1))
 
