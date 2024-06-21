@@ -8,10 +8,10 @@
 	</div>
 	<div class="row">
 		<div class="col">
-			<button class="btn btn-primary w-25" :disable="rendered" @click="update">Update</button>
+			<button class="w-25 btn btn-primary" :disable="rendered" @click="add">Add new</button>
 		</div>
 		<div class="col">
-			<button class="w-25 btn btn-primary" :disable="rendered" @click="add">Add new</button>
+			<button class="btn btn-primary w-25" :disable="rendered" @click="update">Update</button>
 		</div>
 	</div>
 	<hr />
