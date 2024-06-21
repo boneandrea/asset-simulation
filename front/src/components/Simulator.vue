@@ -229,6 +229,7 @@ const update = () => {
 }
 const save = () => {
 	localStorage.setItem('assets', JSON.stringify(items.value))
+	alert('saved')
 }
 const restore = () => {
 	const data = JSON.parse(localStorage.getItem('assets'))
