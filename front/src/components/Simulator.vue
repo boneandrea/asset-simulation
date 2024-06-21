@@ -26,9 +26,11 @@
 		</div>
 		<hr />
 		<div class="row md-1">
-			<div class="col-mr-3">
-				<button class="btn mr-3 btn-info" @click="save">Save</button>
-				<button class="btn mr-3 btn-info" @click="restore">Restore</button>
+			<div class="col">
+				<button class="btn mr-3 btn-info w-25" @click="save">Save</button>
+			</div>
+			<div class="col">
+				<button class="btn mr-3 btn-info w-25" @click="restore">Restore</button>
 			</div>
 		</div>
 	</div>
