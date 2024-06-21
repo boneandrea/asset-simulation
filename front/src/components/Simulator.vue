@@ -3,22 +3,24 @@
 		<canvas ref="canvasRef"></canvas>
 	</div>
 	<hr />
-	<div @keyup.enter="update">
-		<Input v-for="(item, index) in items" :id="index" :data="item" @change="change" @remove="remove" />
-	</div>
-	<div class="row">
-		<div class="col">
-			<button class="w-25 btn btn-primary" :disable="rendered" @click="add">Add new</button>
+	<div class="items">
+		<div @keyup.enter="update">
+			<Input v-for="(item, index) in items" :id="index" :data="item" @change="change" @remove="remove" />
 		</div>
-		<div class="col">
-			<button class="btn btn-primary w-25" :disable="rendered" @click="update">Update</button>
+		<div class="row">
+			<div class="col">
+				<button class="w-25 btn btn-primary" :disable="rendered" @click="add">Add new</button>
+			</div>
+			<div class="col">
+				<button class="btn btn-primary w-25" :disable="rendered" @click="update">Update</button>
+			</div>
 		</div>
-	</div>
-	<hr />
-	<div class="row md-1">
-		<div class="col-mr-3">
-			<button class="btn mr-3 btn-info" @click="save">Save</button>
-			<button class="btn mr-3 btn-info" @click="restore">Restore</button>
+		<hr />
+		<div class="row md-1">
+			<div class="col-mr-3">
+				<button class="btn mr-3 btn-info" @click="save">Save</button>
+				<button class="btn mr-3 btn-info" @click="restore">Restore</button>
+			</div>
 		</div>
 	</div>
 </template>
@@ -229,7 +231,6 @@ const update = () => {
 }
 const save = () => {
 	localStorage.setItem('assets', JSON.stringify(items.value))
-	alert('saved')
 }
 const restore = () => {
 	const data = JSON.parse(localStorage.getItem('assets'))
@@ -243,7 +244,7 @@ const restore = () => {
 }
 </script>
 <style scoped>
-canvas {
-	width: 100%;
+.items {
+	width: 1200px;
 }
 </style>
