@@ -122,7 +122,7 @@ const remove = (e) => {
 }
 const add = () => {
 	items.value.push({
-		name: 'new',
+		name: '',
 		rate1: 0,
 		rate2: 0,
 		start_year: 2024,
@@ -162,7 +162,6 @@ const update = () => {
 
 			// set labels
 			const xaxis = {}
-			console.clear()
 			configureGraph()
 
 			const CURRENT_YEAR = new Date().getFullYear()
@@ -235,6 +234,8 @@ const restore = () => {
 	const data = JSON.parse(localStorage.getItem('assets'))
 	console.log(data)
 	items.value.splice(0)
+	graphData.value.datasets.splice(0)
+	graphData.value.labels.splice(0)
 	data.forEach((d) => {
 		items.value.push(d)
 	})
