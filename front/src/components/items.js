@@ -1,5 +1,5 @@
-const defaultItems = {
+const defaultAssets = {
 	bone_at: null,
 	items: [],
 }
-export { defaultItems }
+export { defaultAssets }

@@ -5,24 +5,24 @@
 	<hr />
 	<div class="items">
 		<input
-			v-model="items.bone_at"
+			v-model="assetData.bone_at"
 			type="number"
 			class="form-control w-25"
 			min="1970"
 			placeholder="生まれ年"
 			title="生まれ年"
-			:class="{ 'is-invalid': !items.bone_at }"
+			:class="{ 'is-invalid': !assetData.bone_at }"
 		/>
 		<hr />
 		<div @keyup.enter="update">
-			<Input v-for="(item, index) in items.items" :id="index" :data="item" @change="change" @remove="remove" />
+			<Input v-for="(item, index) in assetData.items" :id="index" :data="item" @change="change" @remove="remove" />
 		</div>
 		<div class="row">
 			<div class="col">
 				<button class="w-25 btn btn-primary" @click="add">Add new</button>
 			</div>
 			<div class="col">
-				<button class="btn btn-primary w-25" :disabled="items.bone_at < 1970" @click="update">Update</button>
+				<button class="btn btn-primary w-25" :disabled="assetData.bone_at < 1970" @click="update">Update</button>
 			</div>
 		</div>
 		<hr />
@@ -45,14 +45,14 @@ defineProps({
 })
 import { ref, onMounted } from 'vue'
 import { Chart, registerables } from 'chart.js'
-import { defaultItems } from './items.js'
+import { defaultAssets } from './items.js'
 import Input from './Input.vue'
 Chart.register(...registerables)
 
 const API_ROOT = import.meta.env.VITE_API_ROOT
 
 // データ
-const items = ref(defaultItems)
+const assetData = ref(defaultAssets)
 const graphData = ref({
 	labels: [],
 	datasets: [],
@@ -110,7 +110,7 @@ const renderGraph = () => {
 const configureGraph = () => {
 	graphData.value.labels.splice(0)
 	graphData.value.datasets.splice(0)
-	items.value.items.forEach((i) => {
+	assetData.value.items.forEach((i) => {
 		graphData.value.datasets.push({
 			label: i.name,
 			data: [],
@@ -126,15 +126,15 @@ onMounted(() => {
 })
 
 const remove = (e) => {
-	const index = items.value.items.findIndex((item) => item.name === e.name)
+	const index = assetData.value.items.findIndex((item) => item.name === e.name)
 	if (index !== -1) {
-		items.value.items.splice(index, 1)
+		assetData.value.items.splice(index, 1)
 		graphData.value.datasets.splice(index, 1)
 		graphData.value.labels.splice(index, 1)
 	}
 }
 const add = () => {
-	items.value.items.push({
+	assetData.value.items.push({
 		name: null,
 		rate1: null,
 		rate2: null,
@@ -162,14 +162,14 @@ const update = () => {
 		method: 'POST',
 		headers: { 'content-type': 'application/json' },
 		body: JSON.stringify({
-			data: items.value,
+			data: assetData.value,
 		}),
 	})
 		.then((response) => {
 			return response.json()
 		})
-		.then((r) => {
-			if (r.status === 'error') {
+		.then((response) => {
+			if (response.status === 'error') {
 				throw new Error(r['reason'])
 			}
 
@@ -179,7 +179,7 @@ const update = () => {
 
 			const CURRENT_YEAR = new Date().getFullYear()
 			const collectXaxis = {}
-			r.forEach((data, index) => {
+			response.forEach((data, index) => {
 				data.data.forEach((e) => (collectXaxis[e.year] = true))
 			})
 
@@ -187,10 +187,10 @@ const update = () => {
 				.map((e) => parseInt(e))
 				.sort()
 				.filter((year) => year >= CURRENT_YEAR)
-			labels.forEach((d) => graphData.value.labels.push(`${d}/${d - items.value.bone_at}`))
+			labels.forEach((d) => graphData.value.labels.push(`${d}/${d - assetData.value.bone_at}`))
 
-			const SUM_GRAPH_INDEX = r.length
-			const SPENT_GRAPH_INDEX = r.length + 1
+			const SUM_GRAPH_INDEX = response.length
+			const SPENT_GRAPH_INDEX = response.length + 1
 			graphData.value.datasets.push(
 				{
 					label: 'TOTAL',
@@ -211,7 +211,7 @@ const update = () => {
 				}
 			)
 
-			r.forEach((data, index) => {
+			response.forEach((data, index) => {
 				graphData.value.datasets[index].label = data.name
 				data.data
 					.filter((e) => e.year >= CURRENT_YEAR)
@@ -224,9 +224,11 @@ const update = () => {
 							(graphData.value.datasets[SUM_GRAPH_INDEX].data[i] ?? 0) + e.asset
 
 						// 消費
-						if (e.year >= items.value.bone_at + items.value.items[index].end_age) {
+						if (e.year >= assetData.value.bone_at + assetData.value.items[index].end_age) {
 							const sum =
-								e.asset > items.value.items[index].withdraw * 12 ? items.value.items[index].withdraw * 12 : e.asset
+								e.asset > assetData.value.items[index].withdraw * 12
+									? assetData.value.items[index].withdraw * 12
+									: e.asset
 							graphData.value.datasets[SPENT_GRAPH_INDEX].data[i] =
 								(graphData.value.datasets[SPENT_GRAPH_INDEX].data[i] ?? 0) + sum
 						}
@@ -242,18 +244,18 @@ const update = () => {
 		.finally(() => {})
 }
 const save = () => {
-	localStorage.setItem('assets', JSON.stringify(items.value))
+	localStorage.setItem('assets', JSON.stringify(assetData.value))
 	alert('saved')
 }
 const restore = () => {
 	const data = JSON.parse(localStorage.getItem('assets'))
-	items.value.items.splice(0)
+	assetData.value.items.splice(0)
 	graphData.value.datasets.splice(0)
 	graphData.value.labels.splice(0)
 	data.items.forEach((d) => {
-		items.value.items.push(d)
+		assetData.value.items.push(d)
 	})
-	items.value.bone_at = data.bone_at
+	assetData.value.bone_at = data.bone_at
 	update()
 }
 </script>
