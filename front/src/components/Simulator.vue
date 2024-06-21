@@ -8,10 +8,10 @@
 	</div>
 	<div class="row">
 		<div class="col">
-			<button class="btn btn-primary" :disable="rendered" @click="update">Update</button>
+			<button class="btn btn-primary w-25" :disable="rendered" @click="update">Update</button>
 		</div>
 		<div class="col">
-			<button class="btn btn-primary" :disable="rendered" @click="add">Add new</button>
+			<button class="w-25 btn btn-primary" :disable="rendered" @click="add">Add new</button>
 		</div>
 	</div>
 	<hr />
@@ -122,15 +122,15 @@ const remove = (e) => {
 }
 const add = () => {
 	items.value.push({
-		name: '',
-		rate1: 0,
-		rate2: 0,
-		start_year: 2024,
-		asset_start: 0,
-		pay_per_month: 0,
-		withdraw: 0,
-		year_change_rate: 62,
-		end_age: 60,
+		name: null,
+		rate1: null,
+		rate2: null,
+		start_year: null,
+		asset_start: null,
+		pay_per_month: null,
+		withdraw: null,
+		year_change_rate: null,
+		end_age: null,
 	})
 	graphData.value.datasets.push({})
 	graphData.value.labels.push({

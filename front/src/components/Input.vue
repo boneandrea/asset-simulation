@@ -5,7 +5,7 @@
 				<button class="btn btn-danger" :disable="rendered" @click="remove">
 					<i class="bi bi-trash"></i>
 				</button>
-				<input class="form-control" v-model="data.name" placeholder="name" />
+				<input class="form-control" v-model="data.name" placeholder="商品名" :class="{ 'is-invalid': !data.name }" />
 			</div>
 		</div>
 		<div class="col-ms-10">
@@ -15,8 +15,8 @@
 					type="number"
 					class="form-control"
 					min="55"
-					placeholder="初期投資額"
-					title="初期投資額"
+					placeholder="初期投資額(万)"
+					title="初期投資額(万)"
 				/>
 				<input
 					v-model="data.rate1"
@@ -39,8 +39,8 @@
 					type="number"
 					class="form-control"
 					min="0"
-					placeholder="積立/month(万)"
-					title="積立/month(万)"
+					placeholder="積立/月(万)"
+					title="積立/月(万)"
 				/>
 				<input
 					v-model="data.start_year"
@@ -71,8 +71,8 @@
 					type="number"
 					class="form-control"
 					min="0"
-					placeholder="取り崩し/month(万)"
-					title="取り崩し/month(万)"
+					placeholder="取崩/月(万)"
+					title="取崩/月(万)"
 				/>
 			</div>
 		</div>
