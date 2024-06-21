@@ -232,7 +232,6 @@ const save = () => {
 }
 const restore = () => {
 	const data = JSON.parse(localStorage.getItem('assets'))
-	console.log(data)
 	items.value.splice(0)
 	graphData.value.datasets.splice(0)
 	graphData.value.labels.splice(0)
