@@ -14,6 +14,13 @@
 			<button class="btn btn-primary" :disable="rendered" @click="add">Add new</button>
 		</div>
 	</div>
+	<hr />
+	<div class="row md-1">
+		<div class="col-mr-3">
+			<button class="btn mr-3 btn-info" @click="save">Save</button>
+			<button class="btn mr-3 btn-info" @click="restore">Restore</button>
+		</div>
+	</div>
 </template>
 <script setup>
 defineProps({
@@ -220,6 +227,18 @@ const update = () => {
 			alert(e)
 		})
 		.finally(() => {})
+}
+const save = () => {
+	localStorage.setItem('assets', JSON.stringify(items.value))
+}
+const restore = () => {
+	const data = JSON.parse(localStorage.getItem('assets'))
+	console.log(data)
+	items.value.splice(0)
+	data.forEach((d) => {
+		items.value.push(d)
+	})
+	update()
 }
 </script>
 <style scoped>
