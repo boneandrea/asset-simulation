@@ -13,7 +13,7 @@ class Simulator
     public function __construct(
         $bone_at
     ) {
-        error_log($this->bone_at=$bone_at);
+        $this->bone_at=$bone_at;
     }
 
     public function cal(
