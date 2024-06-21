@@ -221,7 +221,6 @@ const update = () => {
 							(graphData.value.datasets[SUM_GRAPH_INDEX].data[i] ?? 0) + e.asset
 
 						// 消費
-						console.log(items.value.bone_at + 57)
 						if (e.year >= items.value.bone_at + 57) {
 							const sum =
 								e.asset > items.value.items[index].withdraw * 12 ? items.value.items[index].withdraw * 12 : e.asset
