@@ -63,8 +63,8 @@
 					type="number"
 					class="form-control"
 					min="50"
-					placeholder="rate切替年齢"
-					title="rate切替年齢"
+					placeholder="利回り切替年齢"
+					title="利回り切替年齢"
 				/>
 				<input
 					v-model="data.withdraw"
