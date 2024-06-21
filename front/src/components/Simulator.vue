@@ -29,6 +29,7 @@ import Input from './Input.vue'
 Chart.register(...registerables)
 
 const BONE_AT = 1973
+const API_ROOT = import.meta.env.VITE_API_ROOT
 
 // データ
 const items = ref(defaultItems)
@@ -136,7 +137,7 @@ const add = () => {
 }
 const update = () => {
 	chart.value.destroy()
-	const api = 'http://localhost:8888/cal.php'
+	const api = `${API_ROOT}/cal.php`
 	fetch(api, {
 		method: 'POST',
 		headers: { 'content-type': 'application/json' },

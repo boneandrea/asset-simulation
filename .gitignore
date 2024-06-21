@@ -1,0 +1,7 @@
+/back/vendor/
+/vendor/
+/front/.vscode/
+/front/.env
+/front/.env.production
+*.cache
+/.node-version
