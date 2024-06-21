@@ -42,12 +42,7 @@
 	</div>
 </template>
 <script setup>
-defineProps({
-	msg: {
-		type: String,
-		required: true,
-	},
-})
+defineProps({})
 import { ref, onMounted } from 'vue'
 import { Chart, registerables } from 'chart.js'
 import { defaultAssets } from './items.js'
@@ -129,9 +124,9 @@ const renderGraph = () => {
 const configureGraph = () => {
 	graphData.value.labels.splice(0)
 	graphData.value.datasets.splice(0)
-	assetData.value.items.forEach((i) => {
+	assetData.value.items.forEach((item) => {
 		graphData.value.datasets.push({
-			label: i.name,
+			label: item.name,
 			data: [],
 			fill: false,
 			borderColor: randomColor(),
@@ -266,16 +261,22 @@ const save = () => {
 	localStorage.setItem('assets', JSON.stringify(assetData.value))
 	alert('saved')
 }
+
+// TODO: 2回押すとreactiveじゃなくなる
 const restore = () => {
-	const data = JSON.parse(localStorage.getItem('assets'))
-	assetData.value.items.splice(0)
-	graphData.value.datasets.splice(0)
-	graphData.value.labels.splice(0)
-	data.items.forEach((d) => {
-		assetData.value.items.push(d)
-	})
-	assetData.value.bone_at = data.bone_at
-	update()
+	try {
+		const data = JSON.parse(localStorage.getItem('assets'))
+		assetData.value.items.splice(0)
+		graphData.value.datasets.splice(0)
+		graphData.value.labels.splice(0)
+		data.items.forEach((d) => {
+			assetData.value.items.push(d)
+		})
+		assetData.value.bone_at = data.bone_at
+		update()
+	} catch (e) {
+		alert('failed to restore')
+	}
 }
 </script>
 <style scoped>

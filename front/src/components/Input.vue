@@ -2,7 +2,7 @@
 	<div class="row">
 		<div class="col-md-2">
 			<div class="input-group mb-3">
-				<button class="btn btn-danger" :disable="rendered" @click="remove">
+				<button class="btn btn-danger" @click="remove">
 					<i class="bi bi-trash"></i>
 				</button>
 				<input class="form-control" v-model="data.name" placeholder="商品名" :class="{ 'is-invalid': !data.name }" />
