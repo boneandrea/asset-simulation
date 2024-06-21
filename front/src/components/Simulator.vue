@@ -86,6 +86,20 @@ const options = {
 			},
 		},
 	},
+	plugins: {
+		tooltip: {
+			callbacks: {
+				label: function (context) {
+					const value = context.raw
+					const label = context.dataset.label
+
+					if (label === '浪費') {
+						return `${context.dataset.label} ${context.formattedValue} / ${Math.round(value / 12)}`
+					}
+				},
+			},
+		},
+	},
 }
 const randomColor = () => '#' + Math.floor(Math.random() * 16777215).toString(16)
 const chart = ref(null)
