@@ -11,6 +11,7 @@
 			min="1970"
 			placeholder="生まれ年"
 			title="生まれ年"
+			:class="{ 'is-invalid': !items.bone_at }"
 		/>
 		<hr />
 		<div @keyup.enter="update">
