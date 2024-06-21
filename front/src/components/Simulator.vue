@@ -77,7 +77,7 @@ const options = {
 			position: 'right',
 			title: {
 				display: true,
-				text: '年/月額(万)',
+				text: '取崩額:年/月(万)',
 			},
 			ticks: {
 				callback: function (value, index, ticks) {
