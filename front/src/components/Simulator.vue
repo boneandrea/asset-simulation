@@ -34,6 +34,11 @@
 				<button class="btn mr-3 btn-info w-25" @click="restore">Restore</button>
 			</div>
 		</div>
+		<hr />
+		<ul>
+			<li>各商品、投資終了後は毎月一定額を取り崩す</li>
+			<li>税金は考慮してない</li>
+		</ul>
 	</div>
 </template>
 <script setup>
@@ -77,7 +82,7 @@ const options = {
 			position: 'right',
 			title: {
 				display: true,
-				text: '年/月額(万) : 税引前',
+				text: '年/月額(万)',
 			},
 			ticks: {
 				callback: function (value, index, ticks) {
