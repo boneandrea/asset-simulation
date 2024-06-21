@@ -4,15 +4,24 @@
 	</div>
 	<hr />
 	<div class="items">
+		<input
+			v-model="items.bone_at"
+			type="number"
+			class="form-control w-25"
+			min="1970"
+			placeholder="生まれ年"
+			title="生まれ年"
+		/>
+		<hr />
 		<div @keyup.enter="update">
-			<Input v-for="(item, index) in items" :id="index" :data="item" @change="change" @remove="remove" />
+			<Input v-for="(item, index) in items.items" :id="index" :data="item" @change="change" @remove="remove" />
 		</div>
 		<div class="row">
 			<div class="col">
-				<button class="w-25 btn btn-primary" :disable="rendered" @click="add">Add new</button>
+				<button class="w-25 btn btn-primary" @click="add">Add new</button>
 			</div>
 			<div class="col">
-				<button class="btn btn-primary w-25" :disable="rendered" @click="update">Update</button>
+				<button class="btn btn-primary w-25" :disabled="items.bone_at < 1970" @click="update">Update</button>
 			</div>
 		</div>
 		<hr />
@@ -37,7 +46,6 @@ import { defaultItems } from './items.js'
 import Input from './Input.vue'
 Chart.register(...registerables)
 
-const BONE_AT = 1973
 const API_ROOT = import.meta.env.VITE_API_ROOT
 
 // データ
@@ -99,7 +107,7 @@ const renderGraph = () => {
 const configureGraph = () => {
 	graphData.value.labels.splice(0)
 	graphData.value.datasets.splice(0)
-	items.value.forEach((i) => {
+	items.value.items.forEach((i) => {
 		graphData.value.datasets.push({
 			label: i.name,
 			data: [],
@@ -115,15 +123,15 @@ onMounted(() => {
 })
 
 const remove = (e) => {
-	const index = items.value.findIndex((item) => item.name === e.name)
+	const index = items.value.items.findIndex((item) => item.name === e.name)
 	if (index !== -1) {
-		items.value.splice(index, 1)
+		items.value.items.splice(index, 1)
 		graphData.value.datasets.splice(index, 1)
 		graphData.value.labels.splice(index, 1)
 	}
 }
 const add = () => {
-	items.value.push({
+	items.value.items.push({
 		name: null,
 		rate1: null,
 		rate2: null,
@@ -176,7 +184,7 @@ const update = () => {
 				.map((e) => parseInt(e))
 				.sort()
 				.filter((year) => year >= CURRENT_YEAR)
-			labels.forEach((d) => graphData.value.labels.push(`${d}/${d - BONE_AT}`))
+			labels.forEach((d) => graphData.value.labels.push(`${d}/${d - items.value.bone_at}`))
 
 			const SUM_GRAPH_INDEX = r.length
 			const SPENT_GRAPH_INDEX = r.length + 1
@@ -213,8 +221,10 @@ const update = () => {
 							(graphData.value.datasets[SUM_GRAPH_INDEX].data[i] ?? 0) + e.asset
 
 						// 消費
-						if (e.year >= BONE_AT + 57) {
-							const sum = e.asset > items.value[index].withdraw * 12 ? items.value[index].withdraw * 12 : e.asset
+						console.log(items.value.bone_at + 57)
+						if (e.year >= items.value.bone_at + 57) {
+							const sum =
+								e.asset > items.value.items[index].withdraw * 12 ? items.value.items[index].withdraw * 12 : e.asset
 							graphData.value.datasets[SPENT_GRAPH_INDEX].data[i] =
 								(graphData.value.datasets[SPENT_GRAPH_INDEX].data[i] ?? 0) + sum
 						}
@@ -235,12 +245,13 @@ const save = () => {
 }
 const restore = () => {
 	const data = JSON.parse(localStorage.getItem('assets'))
-	items.value.splice(0)
+	items.value.items.splice(0)
 	graphData.value.datasets.splice(0)
 	graphData.value.labels.splice(0)
-	data.forEach((d) => {
-		items.value.push(d)
+	data.items.forEach((d) => {
+		items.value.items.push(d)
 	})
+	items.value.bone_at = data.bone_at
 	update()
 }
 </script>

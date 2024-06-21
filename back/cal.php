@@ -10,16 +10,13 @@ if($_SERVER['REQUEST_METHOD'] === "OPTIONS") {
 
 $body = file_get_contents("php://input");
 $json = json_decode($body, true);
-$options = $json["data"] ?? [];
+$items = $json["data"]["items"] ?? [];
 
 $x = new Simulator(
-    isCli: (php_sapi_name() === "cli"),
+    bone_at: $json["data"]["bone_at"],
 );
-$result = [];
 
-foreach($options as $option){
-    $name=$option["name"];
-    $result[] = $x->cal(
+$result = array_map(fn($option) => $x->cal(
         json: true,
         name: $option["name"],
         asset:$option["asset_start"],
@@ -29,8 +26,7 @@ foreach($options as $option){
         withdraw_per_month:$option["withdraw"],
         year_change_rate:$option["year_change_rate"],
         option: $option,
-    );
-}
+),$items);
 
 $x->dump_sum_draw();
 

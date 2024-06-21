@@ -1,6 +1,5 @@
 <?php
 
-const BONE_AT = 1973;
 function eecho($s)
 {
     if(php_sapi_name() === "cli") {
@@ -12,12 +11,9 @@ class Simulator
 {
 
     public function __construct(
-        $isCli = false,
-        $rate_rakuten = 1.0,
-        $rate_sony = 1.0,
-        $rate_later = 1.06,
-        $year_change_rate = 65
+        $bone_at
     ) {
+        error_log($this->bone_at=$bone_at);
     }
 
     public function cal(
@@ -45,7 +41,7 @@ class Simulator
         $sum_withdraw = 0;
 
         for($i = 0;$i < $range;$i++) {
-            $age = $i + $start_year - BONE_AT;
+            $age = $i + $start_year - $this->bone_at;
             $sep = ($i + $start_year === $current_year) ? "+++ now" : "";
             if(($i - 1) % 5 === 0) {
                 $sep = $age."歳";
