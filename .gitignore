@@ -5,3 +5,4 @@
 /front/.env.production
 *.cache
 /.node-version
+/.env
