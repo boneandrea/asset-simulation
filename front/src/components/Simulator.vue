@@ -22,13 +22,25 @@
 				<button class="w-25 btn btn-primary" @click="add">Add new</button>
 			</div>
 			<div class="col">
-				<button class="btn btn-primary w-25" :disabled="assetData.bone_at < 1970" @click="update">Update</button>
+				<button
+					class="btn btn-primary w-25"
+					:disabled="assetData.items.length === 0 || assetData.bone_at < 1970"
+					@click="update"
+				>
+					Update
+				</button>
 			</div>
 		</div>
 		<hr />
 		<div class="row md-1">
 			<div class="col">
-				<button class="btn mr-3 btn-info w-25" @click="save">Save</button>
+				<button
+					class="btn mr-3 btn-info w-25"
+					@click="save"
+					:disabled="assetData.items.length === 0 || assetData.bone_at < 1970"
+				>
+					Save
+				</button>
 			</div>
 			<div class="col">
 				<button class="btn mr-3 btn-info w-25" @click="restore">Restore</button>
