@@ -275,6 +275,7 @@ const update = () => {
 		.finally(() => {})
 }
 const save = () => {
+	if (!confirm('save OK?')) return
 	localStorage.setItem('assets', JSON.stringify(assetData.value))
 	alert('saved')
 }
