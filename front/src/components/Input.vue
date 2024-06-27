@@ -15,6 +15,7 @@
 					type="number"
 					class="form-control"
 					min="55"
+					step="10"
 					placeholder="初期投資額(万)"
 					title="初期投資額(万)"
 				/>
