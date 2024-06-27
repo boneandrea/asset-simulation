@@ -39,7 +39,6 @@
 		<ul>
 			<li>各商品、投資終了後は毎月一定額を取り崩す</li>
 			<li>税金は考慮してない</li>
-			<li>Restoreを2回押すと動かなくなる&rarr;reload</li>
 		</ul>
 		Bug(s)
 		<ul>
