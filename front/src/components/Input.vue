@@ -1,11 +1,23 @@
 <template>
 	<div class="row">
-		<div class="col-md-2">
-			<div class="input-group mb-3">
-				<button class="btn btn-danger" @click="remove">
-					<i class="bi bi-trash"></i>
-				</button>
-				<input class="form-control" v-model="data.name" placeholder="商品名" :class="{ 'is-invalid': !data.name }" />
+		<div class="col-md-12">
+			<div class="row">
+				<div class="col-2">
+					<div class="input-group mb-3">
+						<button class="btn btn-danger" @click="remove">
+							<i class="bi bi-trash"></i>
+						</button>
+						<input
+							class="form-control"
+							v-model="data.name"
+							placeholder="商品名"
+							:class="{ 'is-invalid': !data.name }"
+						/>
+					</div>
+				</div>
+				<div class="col-10">
+					<input v-model="data.memo" class="form-control" placeholder="メモ" title="メモ" />
+				</div>
 			</div>
 		</div>
 		<div class="col-ms-10">
