@@ -12,6 +12,7 @@
 			placeholder="生まれ年"
 			title="生まれ年"
 			:class="{ 'is-invalid': !assetData.bone_at }"
+			@keyup.enter="update"
 		/>
 		<hr />
 		<div @keyup.enter="update">
