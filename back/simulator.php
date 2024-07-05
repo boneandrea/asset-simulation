@@ -57,8 +57,8 @@ class Simulator
 
             $paid_sum += $pay_per_year;
 
-            // 取り崩し計算
             if($age > $stop_age) {
+                // 取り崩し
                 $withdraw_per_year=$withdraw_per_month * 12;
                 $asset -= $withdraw_per_year;
                 if(!isset($this->sum_draw_per_year[$age])) {
@@ -67,6 +67,7 @@ class Simulator
                 $this->sum_draw_per_year[$age] += $withdraw_per_year;
                 $sum_withdraw += $withdraw_per_year;
             } else {
+                // 積立
                 $asset = $asset + $pay_per_year;
             }
             $asset *= $this->change_rate_simulation($age, $name,$option);
